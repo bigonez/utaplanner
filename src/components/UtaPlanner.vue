@@ -32,7 +32,7 @@
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'UtaPlanner',
   props: {
     msg: String
   }

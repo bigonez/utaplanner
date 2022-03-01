@@ -1,15 +1,15 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <UtaPlanner msg="Welcome to UTA 100 Planner"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import UtaPlanner from './components/UtaPlanner.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    UtaPlanner
   }
 }
 </script>
