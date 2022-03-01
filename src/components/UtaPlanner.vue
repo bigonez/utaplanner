@@ -1,32 +1,23 @@
 <template>
-  <div class="hello">
+  <div class="raceplanner">
     <h1>{{ msg }}</h1>
     <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+      Schedule of UTA 100 race based on the previous year's result.<br>
+      Please choose the start group and the expected finish time.
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <label>Start Group</label>
+    <select v-model="startGroup">
+      <option v-for="sItem in startGrps" :value="sItem.sTime" :key="sItem.id">
+        {{ sItem.sLabel }}
+      </option>
+    </select>
+    <label>Expected Finish Time</label>
+    <select v-model="finishTime">
+      <option v-for="hrs in finishHrs" :value="hrs" :key="hrs.id">
+        {{ hrs }} hours
+      </option>
+    </select>
+
   </div>
 </template>
 
@@ -35,6 +26,24 @@ export default {
   name: 'UtaPlanner',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      finishHrs: [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
+      startGrps: [
+        {sTime:380, sLabel:'Group 1, 6:20am'},
+        {sTime:387, sLabel:'Group 2, 6:27am'},
+        {sTime:416, sLabel:'Group 3, 6:56am'},
+        {sTime:426, sLabel:'Group 4, 7:06am'},
+        {sTime:441, sLabel:'Group 5, 7:21am'},
+        {sTime:457, sLabel:'Group 6, 7:37am'},
+        {sTime:474, sLabel:'Group 7, 7:54am'}
+      ],
+      selected: '',
+      prefix: '',
+      first: '',
+      last: ''
+    }
   }
 }
 </script>
@@ -54,5 +63,9 @@ li {
 }
 a {
   color: #42b983;
+}
+select {
+  margin-left: 10px;
+  margin-right: 50px;
 }
 </style>
