@@ -52,7 +52,7 @@
     </table>
 
     <sub v-if="estimated">
-      * the generated schedule for UTA 100 race is based on the previous year's result.
+      * the generated schedule is based on the 2022 UTA100's result.
     </sub>
   </div>
 </template>
