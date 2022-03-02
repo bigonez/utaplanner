@@ -30,7 +30,7 @@
       </tbody>
     </table>
 
-    <table v-if="estimated">
+    <table v-if="estimated" class="utaplan">
       <thead>
         <tr>
           <th>Check Point</th>
@@ -55,6 +55,8 @@
       * the generated schedule is based on the 2021 UTA100's result.
     </sub>
   </div>
+
+  <footer> <small>&copy; Copyright 2022, bigonez</small> </footer>
 </template>
 
 <script>
@@ -229,5 +231,20 @@ td.title {
 }
 td.item {
   text-align: left;
+}
+.utaplan {
+  border-spacing:  0px;
+}
+.utaplan tr:nth-child(even), .utaplan thead tr {
+  background-color: #E7E9EB; /* rgba(0,0,0,.05); */
+}
+.utaplan tr td, .utaplan tr th {
+  padding-left: 5px;
+}
+.utaplan tr td, .utaplan tr th {
+  padding-right: 5px;
+}
+footer {
+  margin-top: 10px;
 }
 </style>
