@@ -52,7 +52,7 @@
     </table>
 
     <sub v-if="estimated">
-      * the generated schedule is based on the 2022 UTA100's result.
+      * the generated schedule is based on the 2021 UTA100's result.
     </sub>
   </div>
 </template>
