@@ -20,9 +20,27 @@
       </option>
     </select>
 
-    <p>
-      {{ startGroup }} - {{ expectHours }}
-    </p>
+    <table v-if="estimated">
+      <thead>
+        <tr>
+          <th>Check Point</th>
+          <th>Odometer</th>
+          <th>Race Time</th>
+          <th>Local Time</th>
+          <th>Cut off</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(cpNo, cpidx) in cpNos" :key="cpidx">
+          <td><span :title="cpNames[cpidx]">{{ cpNo }}</span></td>
+          <td>{{ cpOdos[cpidx].toFixed(1) }}</td>
+          <td>{{ expectTimeStrs[cpidx] }}</td>
+          <td>{{ localTimeStrs[cpidx] }}</td>
+          <td>{{ cutOffStrs[cpidx] }}</td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 </template>
 
@@ -45,6 +63,17 @@ var groupToSeconds = function (timeGrpStrs) {
     timeGroup.push( listToSeconds(timeGrpStrs[i]) );
   }
   return timeGroup;
+};
+var minsToStr = function (mins) {
+  var hr = ~~( mins / 60);
+  if (hr < 10) {
+    hr = '0' + hr;
+  }
+  var min = mins % 60;
+  if (min < 10) {
+    min = '0' + min;
+  }
+  return hr + ':' + min;
 };
 
 export default {
@@ -132,6 +161,28 @@ export default {
       }
 
       return localTimes;
+    },
+    expectTimeStrs() {
+      var expectTimeStrs = [];
+      expectTimeStrs.length = this.totalCP;
+      for (var i = 0; i < this.totalCP; i++) {
+        expectTimeStrs[i] = minsToStr( this.expectTimes[i] );
+      }
+
+      return expectTimeStrs;
+    },
+    localTimeStrs() {
+      var localTimeStrs = [];
+      localTimeStrs.length = this.totalCP;
+      for (var i = 0; i < this.totalCP; i++) {
+        var localTime = this.localTimes[i] % 1440;
+        localTimeStrs[i] = minsToStr( localTime );
+      }
+
+      return localTimeStrs;
+    },
+    estimated() {
+      return !(this.startGroup == 0 || this.expectHours == 0);
     }
   }
 }
@@ -156,5 +207,8 @@ a {
 select {
   margin-left: 10px;
   margin-right: 50px;
+}
+table {
+  margin: 20px auto;
 }
 </style>
