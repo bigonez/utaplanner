@@ -7,7 +7,7 @@
     </p>
 
     <label>Expected Finish Time</label>
-    <select v-model="finishTime">
+    <select v-model="expectHours">
       <option v-for="hrs in finishHrs" :value="hrs" :key="hrs.id">
         {{ hrs }} hours
       </option>
@@ -21,7 +21,7 @@
     </select>
 
     <p>
-      {{ startGroup }} - {{ finishTime }}
+      {{ startGroup }} - {{ expectHours }}
     </p>
   </div>
 </template>
@@ -78,8 +78,8 @@ export default {
         {sTime:457, sLabel:'Group 6, 7:37am'},
         {sTime:474, sLabel:'Group 7, 7:54am'}
       ],
-      startGroup: 0,
-      finishTime: 0,
+      startGroup:  0,
+      expectHours: 0,
       first: '',
       last: ''
     }
@@ -88,8 +88,50 @@ export default {
     totalCP() {
       return this.cpNos.length;
     },
+    totalRefer() {
+      return this.ReferTimeStrs.length;
+    },
     referTimes() {
       return groupToSeconds(this.ReferTimeStrs);
+    },
+    expectTimes() {
+      if (this.expectHours == 0) {
+        return null;
+      }
+
+      var expectTimes = [];
+      expectTimes.length = this.totalCP;
+      var refers = [];
+      refers.length = this.totalRefer;
+
+      for (var k = 0; k < this.totalCP; k++) {
+        expectTimes[k] = 0;
+      }
+      for (var i = 0; i < this.totalRefer; i++) {
+        var referTime = this.referTimes[i][this.totalCP - 1];
+        var referFactor = this.expectHours * 3600 / referTime / this.totalRefer;
+        for (var j = 0; j < this.totalCP; j++) {
+          expectTimes[j] += this.referTimes[i][j] * referFactor;
+        }
+      }
+      for (k = 0; k < this.totalCP; k++) {
+        expectTimes[k] = Math.round( expectTimes[k] / 60. );
+      }
+      return expectTimes;
+    },
+    localTimes() {
+      if (this.startGroup == 0 || this.expectHours == 0) {
+        return null;
+      }
+
+      var localTimes = [];
+      localTimes.length = this.totalCP;
+      var startTime = this.startGroup;
+      for (var j = 0; j < this.totalCP; j++) {
+        localTimes[j] = startTime + this.expectTimes[j];
+      }
+
+      return localTimes;
     }
   }
 }
