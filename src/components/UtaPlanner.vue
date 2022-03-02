@@ -2,23 +2,33 @@
   <div class="raceplanner">
     <h1>{{ msg }}</h1>
     <p>
-      Schedule the UTA 100 race based on the previous year's result.<br>
-      Please choose the start group and the expected finish time.
+      Please choose the expected finish time and the start group to generate the race schedule.
     </p>
 
-    <label>Expected Finish Time</label>
-    <select v-model="expectHours">
-      <option v-for="hrs in finishHrs" :value="hrs" :key="hrs.id">
-        {{ hrs }} hours
-      </option>
-    </select>
-
-    <label>Start Group</label>
-    <select v-model="startGroup">
-      <option v-for="sItem in startGrps" :value="sItem.sTime" :key="sItem.id">
-        {{ sItem.sLabel }}
-      </option>
-    </select>
+    <table>
+      <tbody>
+        <tr>
+          <td class="title"><label>Expected Finish Time</label></td>
+          <td class="item">
+            <select v-model="expectHours">
+              <option v-for="hrs in finishHrs" :value="hrs" :key="hrs.id">
+                {{ hrs }} hours
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="title"><label>Start Group</label></td>
+          <td class="item">
+            <select v-model="startGroup">
+              <option v-for="sItem in startGrps" :value="sItem.sTime" :key="sItem.id">
+                {{ sItem.sLabel }}
+              </option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <table v-if="estimated">
       <thead>
@@ -41,6 +51,9 @@
       </tbody>
     </table>
 
+    <sub v-if="estimated">
+      * the generated schedule for UTA 100 race is based on the previous year's result.
+    </sub>
   </div>
 </template>
 
@@ -209,6 +222,12 @@ select {
   margin-right: 50px;
 }
 table {
-  margin: 20px auto;
+  margin: 0px auto 10px;
+}
+td.title {
+  text-align: right;
+}
+td.item {
+  text-align: left;
 }
 </style>
