@@ -239,10 +239,7 @@ td.item {
   background-color: #E7E9EB; /* rgba(0,0,0,.05); */
 }
 .utaplan tr td, .utaplan tr th {
-  padding-left: 5px;
-}
-.utaplan tr td, .utaplan tr th {
-  padding-right: 5px;
+  padding: 3px 5px;
 }
 footer {
   margin-top: 10px;
