@@ -18,6 +18,9 @@
       </option>
     </select>
 
+    <p>
+      {{ startGroup }} - {{ finishTime }}
+    </p>
   </div>
 </template>
 
@@ -39,8 +42,8 @@ export default {
         {sTime:457, sLabel:'Group 6, 7:37am'},
         {sTime:474, sLabel:'Group 7, 7:54am'}
       ],
-      selected: '',
-      prefix: '',
+      startGroup: '',
+      finishTime: '',
       first: '',
       last: ''
     }

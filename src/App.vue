@@ -10,6 +10,9 @@ export default {
   name: 'App',
   components: {
     UtaPlanner
+  },
+  created () {
+    document.title = 'UTA 100 Planner';
   }
 }
 </script>
@@ -21,6 +24,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 50px;
+  margin-top: 25px;
 }
 </style>
