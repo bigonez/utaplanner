@@ -30,7 +30,9 @@
       </tbody>
     </table>
 
-    <table v-if="estimated" class="utaplan">
+    <div v-if="estimated">
+      <p>Race Check Points</p>
+    <table class="utaplan">
       <thead>
         <tr>
           <th>Check Point</th>
@@ -50,6 +52,31 @@
         </tr>
       </tbody>
     </table>
+    </div>
+
+    <div v-if="estimated">
+      <p>Race Segments</p>
+    <table class="utasegment">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>To</th>
+          <th>Time</th>
+          <th>Distance</th>
+          <th>Pace</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(segmentPace, sgidx) in segmentPaces" :key="sgidx">
+          <td><span :title="cpNames[sgidx]">{{ cpNos[sgidx] }}</span></td>
+          <td><span :title="cpNames[sgidx+1]">{{ cpNos[sgidx+1] }}</span></td>
+          <td>{{ segmentTimeStrs[sgidx] }}</td>
+          <td>{{ segmentDistances[sgidx].toFixed(1) }}</td>
+          <td>{{ segmentPace }}</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
 
     <sub v-if="estimated">
       * the generated schedule is based on the 2021 UTA100's result.
@@ -82,7 +109,7 @@ var groupToSeconds = function (timeGrpStrs) {
 var minsToStr = function (mins) {
   var hr = ~~( mins / 60);
   if (hr < 10) {
-    hr = '0' + hr;
+    hr = '' + hr;
   }
   var min = mins % 60;
   if (min < 10) {
@@ -90,6 +117,15 @@ var minsToStr = function (mins) {
   }
   return hr + ':' + min;
 };
+var formPace = function (km, mins) {
+  var pace = mins / km;
+  var m = ~~(pace);
+  var s = Math.round(pace * 60 % 60);
+  if (s < 10) {
+    s = '0' + s;
+  }
+  return m + '\'' + s + '"';
+}
 
 export default {
   name: 'UtaPlanner',
@@ -135,9 +171,11 @@ export default {
     totalRefer() {
       return this.ReferTimeStrs.length;
     },
+
     referTimes() {
       return groupToSeconds(this.ReferTimeStrs);
     },
+
     expectTimes() {
       if (this.expectHours == 0) {
         return null;
@@ -196,6 +234,44 @@ export default {
 
       return localTimeStrs;
     },
+
+    segmentDistances() {
+      var segmentDistances = [];
+      segmentDistances.length = this.totalCP - 1;
+      for (var j = 0; j < this.totalCP - 1; j++) {
+        segmentDistances[j] = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
+      }
+
+      return segmentDistances;
+    },
+    segmentTimes() {
+      var segmentTimes = [];
+      segmentTimes.length = this.totalCP - 1;
+      for (var j = 0; j < this.totalCP - 1; j++) {
+        segmentTimes[j] = this.expectTimes[j + 1] - this.expectTimes[j];
+      }
+
+      return segmentTimes;
+    },
+    segmentTimeStrs() {
+      var segmentTimeStrs = [];
+      segmentTimeStrs.length = this.totalCP - 1;
+      for (var i = 0; i < this.totalCP - 1; i++) {
+        segmentTimeStrs[i] = minsToStr( this.segmentTimes[i] );
+      }
+
+      return segmentTimeStrs;
+    },
+    segmentPaces() {
+      var segmentPaces = [];
+      segmentPaces.length = this.totalCP - 1;
+      for (var j = 0; j < this.totalCP - 1; j++) {
+        segmentPaces[j] = formPace(this.segmentDistances[j], this.segmentTimes[j]);
+      }
+
+      return segmentPaces;
+    },
+
     estimated() {
       return !(this.startGroup == 0 || this.expectHours == 0);
     }
@@ -236,11 +312,30 @@ td.item {
   border-spacing:  0px;
 }
 .utaplan tr:nth-child(even), .utaplan thead tr {
-  background-color: #E7E9EB; /* rgba(0,0,0,.05); */
+  background-color: #E7E9EB;
 }
 .utaplan tr td, .utaplan tr th {
   padding: 3px 5px;
 }
+
+.utasegment {
+  border-spacing:  0px;
+}
+.utasegment tr:nth-child(even), .utasegment thead tr {
+  background-color: #E7E9EB;
+}
+.utasegment tr td, .utasegment tr th {
+  padding: 3px 5px;
+}
+
+.raceplanner div {
+  margin-top: 1em;
+}
+.raceplanner div p {
+  font-weight: bold;
+  margin: 0.5em auto;
+}
+
 footer {
   margin-top: 10px;
 }
