@@ -10,7 +10,7 @@
         </p>
 
         <div class="upform">
-          <el-icon :size="24" color="#cc0000" style="vertical-align: middle">
+          <el-icon :size="24" color="#dc143c" style="vertical-align: middle">
             <flag />
           </el-icon>
           <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="upform">
-          <el-icon :size="24" color="navy" style="vertical-align: middle">
+          <el-icon :size="24" color="#191970" style="vertical-align: middle">
             <clock />
           </el-icon>
           <el-select v-model="startGroup" class="m-2" placeholder="Start Group">
@@ -241,8 +241,9 @@ p {
   font-weight: bold;
 }
 .el-header {
-  --el-header-height: 30px;
-  font-size: 2.5em;
+  --el-header-height: 25px;
+  font-size: 2.24em;
   font-weight: bold;
+  color: #483d8b;
 }
 </style>
