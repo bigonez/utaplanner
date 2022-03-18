@@ -13,7 +13,7 @@
           <el-icon :size="24" color="#cc0000" style="vertical-align: middle">
             <flag />
           </el-icon>
-          <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time" size="default">
+          <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time">
             <el-option v-for="hrs in finishHrs" :value="hrs" :label="hrs + ' hours'" :key="hrs.id">
               {{ hrs }} hours
             </el-option>
@@ -24,7 +24,7 @@
           <el-icon :size="24" color="navy" style="vertical-align: middle">
             <clock />
           </el-icon>
-          <el-select v-model="startGroup" class="m-2" placeholder="Start Group" size="default">
+          <el-select v-model="startGroup" class="m-2" placeholder="Start Group">
             <el-option v-for="sItem in startGrps" :value="sItem.sTime" :label="sItem.sLabel" :key="sItem.id">
               {{ sItem.sLabel }}
             </el-option>
@@ -33,21 +33,21 @@
 
         <div v-if="estimated">
           <p class="uptitle">Race Check Points</p>
-          <el-table :data="cpData" stripe style="width: auto" size="default">
-            <el-table-column prop="name" label="Check Point" />
-            <el-table-column prop="odometer" label="Odometer" />
-            <el-table-column prop="racetime" label="Race Time" />
-            <el-table-column prop="localtime" label="Local Time" />
-            <el-table-column prop="cutoff" label="Cut Off" />
+          <el-table :data="cpData" stripe table-layout="auto">
+            <el-table-column prop="name" label="Check Point" align="center" />
+            <el-table-column prop="odometer" label="Odometer" align="center" />
+            <el-table-column prop="racetime" label="Race Time" align="center" />
+            <el-table-column prop="localtime" label="Local Time" align="center" />
+            <el-table-column prop="cutoff" label="Cut Off" align="center" />
           </el-table>
 
           <p class="uptitle">Race Segments</p>
-          <el-table :data="segmentData" stripe style="width: auto" size="default">
-            <el-table-column prop="from" label="From" />
-            <el-table-column prop="to" label="To" />
-            <el-table-column prop="time" label="Time" />
-            <el-table-column prop="distance" label="Distance" />
-            <el-table-column prop="pace" label="Pace" />
+          <el-table :data="segmentData" stripe table-layout="auto">
+            <el-table-column prop="from" label="From" align="center" />
+            <el-table-column prop="to" label="To" align="center" />
+            <el-table-column prop="time" label="Time" align="center" />
+            <el-table-column prop="distance" label="Distance" align="center" />
+            <el-table-column prop="pace" label="Pace" align="center" />
           </el-table>
 
           <p>
