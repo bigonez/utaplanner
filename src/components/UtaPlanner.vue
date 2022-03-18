@@ -1,89 +1,64 @@
 <template>
-  <div class="raceplanner">
-    <h1>{{ msg }}</h1>
-    <p>
-      Please choose the expected finish time and the start group to generate the race schedule.
-    </p>
+  <div class="common-layout">
+    <el-container>
+      <el-header>{{ msg }}</el-header>
 
-    <table>
-      <tbody>
-        <tr>
-          <td class="title"><label>Expected Finish Time</label></td>
-          <td class="item">
-            <select v-model="expectHours">
-              <option v-for="hrs in finishHrs" :value="hrs" :key="hrs.id">
+      <el-main>
+
+        <p>
+          Please choose the expected finish time and the start group to generate the race schedule.
+        </p>
+
+        <div>
+          <p><label>Expected Finish Time</label></p>
+          <div>
+            <el-select v-model="expectHours" class="m-2" placeholder="Finish Time" size="small">
+              <el-option v-for="hrs in finishHrs" :value="hrs" :label="hrs + ' hours'" :key="hrs.id">
                 {{ hrs }} hours
-              </option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="title"><label>Start Group</label></td>
-          <td class="item">
-            <select v-model="startGroup">
-              <option v-for="sItem in startGrps" :value="sItem.sTime" :key="sItem.id">
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div>
+          <p><label>Start Group</label></p>
+          <div>
+            <el-select v-model="startGroup" class="m-2" placeholder="Start Group" size="small">
+              <el-option v-for="sItem in startGrps" :value="sItem.sTime" :label="sItem.sLabel" :key="sItem.id">
                 {{ sItem.sLabel }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              </el-option>
+            </el-select>
+          </div>
+        </div>
 
-    <div v-if="estimated">
-      <p>Race Check Points</p>
-    <table class="utaplan">
-      <thead>
-        <tr>
-          <th>Check Point</th>
-          <th>Odometer</th>
-          <th>Race Time</th>
-          <th>Local Time</th>
-          <th>Cut off</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(cpNo, cpidx) in cpNos" :key="cpidx">
-          <td><span :title="cpNames[cpidx]">{{ cpNo }}</span></td>
-          <td>{{ cpOdos[cpidx].toFixed(1) }}</td>
-          <td>{{ expectTimeStrs[cpidx] }}</td>
-          <td>{{ localTimeStrs[cpidx] }}</td>
-          <td>{{ cutOffStrs[cpidx] }}</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
+        <div v-if="estimated">
+          <p>Race Check Points</p>
+          <el-table :data="cpData" stripe style="width: auto" size="small">
+            <el-table-column prop="name" label="Check Point" />
+            <el-table-column prop="odometer" label="Odometer" />
+            <el-table-column prop="racetime" label="Race Time" />
+            <el-table-column prop="localtime" label="Local Time" />
+            <el-table-column prop="cutoff" label="Cut Off" />
+          </el-table>
 
-    <div v-if="estimated">
-      <p>Race Segments</p>
-    <table class="utasegment">
-      <thead>
-        <tr>
-          <th>From</th>
-          <th>To</th>
-          <th>Time</th>
-          <th>Distance</th>
-          <th>Pace</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(segmentPace, sgidx) in segmentPaces" :key="sgidx">
-          <td><span :title="cpNames[sgidx]">{{ cpNos[sgidx] }}</span></td>
-          <td><span :title="cpNames[sgidx+1]">{{ cpNos[sgidx+1] }}</span></td>
-          <td>{{ segmentTimeStrs[sgidx] }}</td>
-          <td>{{ segmentDistances[sgidx].toFixed(1) }}</td>
-          <td>{{ segmentPace }}</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
+          <p>Race Segments</p>
+          <el-table :data="segmentData" stripe style="width: auto" size="small">
+            <el-table-column prop="from" label="From" />
+            <el-table-column prop="to" label="To" />
+            <el-table-column prop="time" label="Time" />
+            <el-table-column prop="distance" label="Distance" />
+            <el-table-column prop="pace" label="Pace" />
+          </el-table>
+        </div>
 
-    <sub v-if="estimated">
-      * the generated schedule is based on the 2021 UTA100's result.
-    </sub>
+        <sub v-if="estimated">
+          * the generated schedule is based on the 2021 UTA100's result.
+        </sub>
+
+      </el-main>
+
+      <el-footer>&copy; Copyright 2022, bigonez</el-footer>
+    </el-container>
   </div>
-
-  <footer> <small>&copy; Copyright 2022, bigonez</small> </footer>
 </template>
 
 <script>
@@ -158,8 +133,8 @@ export default {
         {sTime:457, sLabel:'Group 6, 7:37am'},
         {sTime:474, sLabel:'Group 7, 7:54am'}
       ],
-      startGroup:  0,
-      expectHours: 0,
+      startGroup:  '',
+      expectHours: '',
       first: '',
       last: ''
     }
@@ -201,75 +176,40 @@ export default {
       }
       return expectTimes;
     },
-    localTimes() {
-      if (this.startGroup == 0 || this.expectHours == 0) {
-        return null;
-      }
 
-      var localTimes = [];
-      localTimes.length = this.totalCP;
+    cpData() {
+      var cpData = [];
+      cpData.length = this.totalCP;
       var startTime = this.startGroup;
       for (var j = 0; j < this.totalCP; j++) {
-        localTimes[j] = startTime + this.expectTimes[j];
+        cpData[j] = {
+          name: this.cpNos[j],
+          odometer: this.cpOdos[j].toFixed(1),
+          racetime: minsToStr( this.expectTimes[j] ),
+          localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
+          cutoff: this.cutOffStrs[j]
+        };
       }
 
-      return localTimes;
+      return cpData;
     },
-    expectTimeStrs() {
-      var expectTimeStrs = [];
-      expectTimeStrs.length = this.totalCP;
-      for (var i = 0; i < this.totalCP; i++) {
-        expectTimeStrs[i] = minsToStr( this.expectTimes[i] );
-      }
-
-      return expectTimeStrs;
-    },
-    localTimeStrs() {
-      var localTimeStrs = [];
-      localTimeStrs.length = this.totalCP;
-      for (var i = 0; i < this.totalCP; i++) {
-        var localTime = this.localTimes[i] % 1440;
-        localTimeStrs[i] = minsToStr( localTime );
-      }
-
-      return localTimeStrs;
-    },
-
-    segmentDistances() {
-      var segmentDistances = [];
-      segmentDistances.length = this.totalCP - 1;
+    segmentData() {
+      var segmentData = [];
+      segmentData.length = this.totalCP;
       for (var j = 0; j < this.totalCP - 1; j++) {
-        segmentDistances[j] = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
+        var segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
+        var segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
+
+        segmentData[j] = {
+          from: this.cpNos[j],
+          to: this.cpNos[j+1],
+          time: minsToStr( segmentTime ),
+          distance: segmentDistance.toFixed(1),
+          pace: formPace( segmentDistance, segmentTime )
+        };
       }
 
-      return segmentDistances;
-    },
-    segmentTimes() {
-      var segmentTimes = [];
-      segmentTimes.length = this.totalCP - 1;
-      for (var j = 0; j < this.totalCP - 1; j++) {
-        segmentTimes[j] = this.expectTimes[j + 1] - this.expectTimes[j];
-      }
-
-      return segmentTimes;
-    },
-    segmentTimeStrs() {
-      var segmentTimeStrs = [];
-      segmentTimeStrs.length = this.totalCP - 1;
-      for (var i = 0; i < this.totalCP - 1; i++) {
-        segmentTimeStrs[i] = minsToStr( this.segmentTimes[i] );
-      }
-
-      return segmentTimeStrs;
-    },
-    segmentPaces() {
-      var segmentPaces = [];
-      segmentPaces.length = this.totalCP - 1;
-      for (var j = 0; j < this.totalCP - 1; j++) {
-        segmentPaces[j] = formPace(this.segmentDistances[j], this.segmentTimes[j]);
-      }
-
-      return segmentPaces;
+      return segmentData;
     },
 
     estimated() {
@@ -329,7 +269,7 @@ td.item {
 }
 
 .raceplanner div {
-  margin-top: 1em;
+/*  margin-top: 1em; */
 }
 .raceplanner div p {
   font-weight: bold;
