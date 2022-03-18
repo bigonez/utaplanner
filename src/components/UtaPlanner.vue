@@ -9,30 +9,31 @@
           Please choose the expected finish time and the start group to generate the race schedule.
         </p>
 
-        <div>
-          <p><label>Expected Finish Time</label></p>
-          <div>
-            <el-select v-model="expectHours" class="m-2" placeholder="Finish Time" size="small">
-              <el-option v-for="hrs in finishHrs" :value="hrs" :label="hrs + ' hours'" :key="hrs.id">
-                {{ hrs }} hours
-              </el-option>
-            </el-select>
-          </div>
+        <div class="upform">
+          <el-icon :size="24" color="#cc0000" style="vertical-align: middle">
+            <flag />
+          </el-icon>
+          <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time" size="default">
+            <el-option v-for="hrs in finishHrs" :value="hrs" :label="hrs + ' hours'" :key="hrs.id">
+              {{ hrs }} hours
+            </el-option>
+          </el-select>
         </div>
-        <div>
-          <p><label>Start Group</label></p>
-          <div>
-            <el-select v-model="startGroup" class="m-2" placeholder="Start Group" size="small">
-              <el-option v-for="sItem in startGrps" :value="sItem.sTime" :label="sItem.sLabel" :key="sItem.id">
-                {{ sItem.sLabel }}
-              </el-option>
-            </el-select>
-          </div>
+
+        <div class="upform">
+          <el-icon :size="24" color="navy" style="vertical-align: middle">
+            <clock />
+          </el-icon>
+          <el-select v-model="startGroup" class="m-2" placeholder="Start Group" size="default">
+            <el-option v-for="sItem in startGrps" :value="sItem.sTime" :label="sItem.sLabel" :key="sItem.id">
+              {{ sItem.sLabel }}
+            </el-option>
+          </el-select>
         </div>
 
         <div v-if="estimated">
-          <p>Race Check Points</p>
-          <el-table :data="cpData" stripe style="width: auto" size="small">
+          <p class="uptitle">Race Check Points</p>
+          <el-table :data="cpData" stripe style="width: auto" size="default">
             <el-table-column prop="name" label="Check Point" />
             <el-table-column prop="odometer" label="Odometer" />
             <el-table-column prop="racetime" label="Race Time" />
@@ -40,19 +41,19 @@
             <el-table-column prop="cutoff" label="Cut Off" />
           </el-table>
 
-          <p>Race Segments</p>
-          <el-table :data="segmentData" stripe style="width: auto" size="small">
+          <p class="uptitle">Race Segments</p>
+          <el-table :data="segmentData" stripe style="width: auto" size="default">
             <el-table-column prop="from" label="From" />
             <el-table-column prop="to" label="To" />
             <el-table-column prop="time" label="Time" />
             <el-table-column prop="distance" label="Distance" />
             <el-table-column prop="pace" label="Pace" />
           </el-table>
-        </div>
 
-        <sub v-if="estimated">
-          * the generated schedule is based on the 2021 UTA100's result.
-        </sub>
+          <p>
+            * the generated schedule is based on the 2021 UTA100's result.
+          </p>  
+        </div>
 
       </el-main>
 
@@ -62,6 +63,7 @@
 </template>
 
 <script>
+import { Clock, Flag } from '@element-plus/icons-vue'
 
 var strToSeconds = function (timeStr) {
   var timeComponent = timeStr.split(':');
@@ -104,6 +106,10 @@ var formPace = function (km, mins) {
 
 export default {
   name: 'UtaPlanner',
+  components:{
+    Clock,
+    Flag
+  },
   props: {
     msg: String,
   },
@@ -221,62 +227,22 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+p {
+  margin-bottom: 5px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.el-icon {
+  margin-right: 15px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.upform {
+  margin: 1em auto;
 }
-a {
-  color: #42b983;
-}
-select {
-  margin-left: 10px;
-  margin-right: 50px;
-}
-table {
-  margin: 0px auto 10px;
-}
-td.title {
-  text-align: right;
-}
-td.item {
-  text-align: left;
-}
-.utaplan {
-  border-spacing:  0px;
-}
-.utaplan tr:nth-child(even), .utaplan thead tr {
-  background-color: #E7E9EB;
-}
-.utaplan tr td, .utaplan tr th {
-  padding: 3px 5px;
-}
-
-.utasegment {
-  border-spacing:  0px;
-}
-.utasegment tr:nth-child(even), .utasegment thead tr {
-  background-color: #E7E9EB;
-}
-.utasegment tr td, .utasegment tr th {
-  padding: 3px 5px;
-}
-
-.raceplanner div {
-/*  margin-top: 1em; */
-}
-.raceplanner div p {
+.uptitle {
+  font-size: 1.2em;
   font-weight: bold;
-  margin: 0.5em auto;
 }
-
-footer {
-  margin-top: 10px;
+.el-header {
+  --el-header-height: 30px;
+  font-size: 2.5em;
+  font-weight: bold;
 }
 </style>
