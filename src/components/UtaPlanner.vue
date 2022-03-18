@@ -34,20 +34,29 @@
         <div v-if="estimated">
           <p class="uptitle">Race Check Points</p>
           <el-table :data="cpData" stripe table-layout="auto">
+            <el-table-column type="expand">
+              <template #default="props">
+                <p>Odometer: {{ props.row.odometer }} km</p>
+                <p>Local Time: {{ props.row.localtime }}</p>
+                <p>Cutoff Time: {{ props.row.cutoff }}</p>
+              </template>
+            </el-table-column>
             <el-table-column prop="name" label="Check Point" align="center" />
-            <el-table-column prop="odometer" label="Odometer" align="center" />
             <el-table-column prop="racetime" label="Race Time" align="center" />
-            <el-table-column prop="localtime" label="Local Time" align="center" />
-            <el-table-column prop="cutoff" label="Cut Off" align="center" />
           </el-table>
 
           <p class="uptitle">Race Segments</p>
           <el-table :data="segmentData" stripe table-layout="auto">
+            <el-table-column type="expand">
+              <template #default="props">
+                <p>Time: {{ props.row.time }}</p>
+                <p>Distance: {{ props.row.distance }} km</p>
+                <p>Pace: {{ props.row.pace }}</p>
+              </template>
+            </el-table-column>
+
             <el-table-column prop="from" label="From" align="center" />
             <el-table-column prop="to" label="To" align="center" />
-            <el-table-column prop="time" label="Time" align="center" />
-            <el-table-column prop="distance" label="Distance" align="center" />
-            <el-table-column prop="pace" label="Pace" align="center" />
           </el-table>
 
           <p>
@@ -122,7 +131,7 @@ export default {
                  "Ironpot Ridge Turnaround", "Six Foot Track", "Katoomba Aquatic Centre", "Fairmont Resort Water Point",
                  "Queen Victoria Hospital", "Sewage Treatment Works", "Base of Furber Steps", "Scenic World"],
       cpOdos: [0.0, 1.0, 3.0, 11.4, 21.8, 32.1, 34.7, 45.7, 57.0, 69.2, 78.4, 94.3, 99.0, 100.0],
-      cutOffStrs: ["", "", "", "10:34", "", "14:56", "", "19:09", "22:28", "02:25", "05:39", "", "", "11:54"],
+      cutOffStrs: ["---", "---", "---", "10:34", "---", "14:56", "---", "19:09", "22:28", "02:25", "05:39", "---", "---", "11:54"],
       ReferTimeStrs: [
         ["0:00:00", "0:04:34", "0:12:14", "1:01:04", "1:46:44", "2:41:32", "3:01:04", "4:02:34", "5:13:08", "6:41:37", "7:29:58", "9:04:32", "9:36:57", "9:51:32"],
         ["0:00:00", "0:04:29", "0:12:14", "1:00:44", "1:45:12", "2:38:01", "2:55:39", "3:54:43", "5:04:23", "6:38:10", "7:39:50", "9:12:12", "9:50:57", "10:04:28"],
@@ -246,5 +255,8 @@ p {
   font-weight: bold;
   color: #483d8b;
   text-shadow: 2px 2px 5px grey;
+}
+table p {
+  padding-left: 50px;
 }
 </style>
