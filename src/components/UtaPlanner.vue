@@ -245,5 +245,6 @@ p {
   font-size: 2.24em;
   font-weight: bold;
   color: #483d8b;
+  text-shadow: 2px 2px 5px grey;
 }
 </style>
