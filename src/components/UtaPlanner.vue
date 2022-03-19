@@ -43,19 +43,19 @@
                   <el-col :span="11">
                     <div class="grid-content bg-purple-light cpinfo">
                       <div><strong>Details</strong></div>
-                      <div>Odometer: {{ props.row.odometer }}</div>
-                      <div>Race Time: {{ props.row.racetime }}</div>
-                      <div>Local Time: {{ props.row.localtime }}</div>
-                      <div v-if="props.row.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cutoff }}</span></div>
+                      <div>Odometer: {{ props.row.cpInfo.odometer }}</div>
+                      <div>Race Time: {{ props.row.cpInfo.racetime }}</div>
+                      <div>Local Time: {{ props.row.cpInfo.localtime }}</div>
+                      <div v-if="props.row.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
                     </div>
                   </el-col>
 
                   <el-col :span="11">
-                    <div class="grid-content bg-purple-light cp2next" v-if="props.row.pace">
+                    <div class="grid-content bg-purple-light cp2next" v-if="props.row.toNext">
                       <div><strong>To Next</strong></div>
-                      <div>Distance: {{ props.row.distance }} km</div>
-                      <div>Elapsed Time: {{ props.row.elapse }}</div>
-                      <div>Pace: {{ props.row.pace }}</div>
+                      <div>Distance: {{ props.row.toNext.distance }} km</div>
+                      <div>Elapsed Time: {{ props.row.toNext.elapse }}</div>
+                      <div>Pace: {{ props.row.toNext.pace }}</div>
                     </div>
                   </el-col>
 
@@ -64,9 +64,9 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="name" label="Check Point" align="center" />
-            <el-table-column prop="odometer" label="Odometer" align="center" />
-            <el-table-column prop="racetime" label="Race Time" align="center" />
+            <el-table-column prop="cpInfo.name" label="Check Point" align="center" />
+            <el-table-column prop="cpInfo.odometer" label="Odometer" align="center" />
+            <el-table-column prop="cpInfo.racetime" label="Race Time" align="center" />
           </el-table>
 
           <p class="upcomments">
@@ -216,34 +216,30 @@ export default {
       cpData.length = this.totalCP;
       var startTime = this.startGroup;
 
-      var segmentDistance, segmentTime, segmentPace, distance, elapse;
-
       for (var j = 0; j < this.totalCP; j++) {
-        if (j == this.totalCP-1) {
-          segmentDistance = null;
-          segmentTime = null;
-          segmentPace = null;
-          elapse = null;
-          distance = null;
-        }
-        else {
-          segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
-          segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
-          segmentPace = formPace( segmentDistance, segmentTime );
-          elapse = minsToHM( segmentTime );
-          distance = segmentDistance.toFixed(1);
+        var toNext = null;
+
+        if (j < this.totalCP-1) {
+          var segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
+          var segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
+          var segmentPace = formPace( segmentDistance, segmentTime );
+
+          toNext = {
+            elapse: minsToHM( segmentTime ),
+            distance: segmentDistance.toFixed(1),
+            pace: segmentPace
+          }
         }
 
         cpData[j] = {
-          name: this.cpNos[j],
-          odometer: this.cpOdos[j].toFixed(1) + ' km',
-          racetime: minsToHM( this.expectTimes[j] ),
-          localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
-          cutoff: this.cutOffStrs[j],
-
-          elapse: elapse,
-          distance: distance,
-          pace: segmentPace
+          cpInfo: {
+            name: this.cpNos[j],
+            odometer: this.cpOdos[j].toFixed(1) + ' km',
+            racetime: minsToHM( this.expectTimes[j] ),
+            localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
+            cutoff: this.cutOffStrs[j]
+          },
+          toNext: toNext
         };
       }
 
