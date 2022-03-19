@@ -46,7 +46,7 @@
                       <div>Odometer: {{ props.row.cpInfo.odometer }}</div>
                       <div>Race Time: {{ props.row.cpInfo.racetime }}</div>
                       <div>Local Time: {{ props.row.cpInfo.localtime }}</div>
-                      <div v-if="props.row.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
+                      <div v-if="props.row.cpInfo.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
                     </div>
                   </el-col>
 
