@@ -236,7 +236,7 @@ export default {
         cpData[j] = {
           name: this.cpNos[j],
           odometer: this.cpOdos[j].toFixed(1),
-          racetime: minsToStr( this.expectTimes[j] ),
+          racetime: minsToStr2( this.expectTimes[j] ),
           localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
           cutoff: this.cutOffStrs[j],
 
