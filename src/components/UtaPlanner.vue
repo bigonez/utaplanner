@@ -34,7 +34,7 @@
         <div v-if="estimated">
           <p class="uptitle">Race Schedule</p>
 
-          <el-table :data="cpData" stripe table-layout="auto">
+          <el-table :data="cpData" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails">
             <el-table-column type="expand">
               <template #default="props">
                 <el-row>
@@ -254,6 +254,11 @@ export default {
 
     estimated() {
       return !(this.startGroup == 0 || this.expectHours == 0);
+    }
+  },
+  methods: {
+    toggleDetails(row) {
+      this.$refs.uptable.toggleRowExpansion(row);
     }
   }
 }
