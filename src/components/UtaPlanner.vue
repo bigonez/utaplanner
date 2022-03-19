@@ -3,7 +3,7 @@
     <el-container>
       <el-header>{{ msg }}</el-header>
 
-      <el-main>
+      <el-main style="padding:3px;">
 
         <p>
           Please choose the expected finish time and the start group to generate the race schedule.
@@ -42,7 +42,7 @@
                   <el-col :span="11">
                     <div class="grid-content bg-purple-light cpinfo">
                       <div><strong>Details</strong></div>
-                      <div>Odometer: {{ props.row.odometer }} km</div>
+                      <div>Odometer: {{ props.row.odometer }}</div>
                       <div>Race Time: {{ props.row.racetime }}</div>
                       <div>Local Time: {{ props.row.localtime }}</div>
                       <div v-if="props.row.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cutoff }}</span></div>
@@ -64,10 +64,11 @@
             </el-table-column>
 
             <el-table-column prop="name" label="Check Point" align="center" />
+            <el-table-column prop="odometer" label="Odometer" align="center" />
             <el-table-column prop="racetime" label="Race Time" align="center" />
           </el-table>
           <sub>
-            * the generated schedule is based on the 2021 UTA100's result.
+            * the generated schedule is based on the<br> 2021 UTA100's result.
           </sub>
         </div>
 
@@ -235,7 +236,7 @@ export default {
 
         cpData[j] = {
           name: this.cpNos[j],
-          odometer: this.cpOdos[j].toFixed(1),
+          odometer: this.cpOdos[j].toFixed(1) + ' km',
           racetime: minsToStr2( this.expectTimes[j] ),
           localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
           cutoff: this.cutOffStrs[j],
