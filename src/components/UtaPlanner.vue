@@ -113,7 +113,7 @@ var minsToStr = function (mins) {
   }
   return hr + ':' + min;
 };
-var minsToStr2 = function (mins) {
+var minsToHM = function (mins) {
   var hr = ~~( mins / 60);
   if (hr < 10) {
     hr = '' + hr;
@@ -170,9 +170,7 @@ export default {
         {sTime:474, sLabel:'Group 7, 7:54am'}
       ],
       startGroup:  '',
-      expectHours: '',
-      first: '',
-      last: ''
+      expectHours: ''
     }
   },
   computed: {
@@ -232,14 +230,14 @@ export default {
           segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
           segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
           segmentPace = formPace( segmentDistance, segmentTime );
-          elapse = minsToStr2( segmentTime );
+          elapse = minsToHM( segmentTime );
           distance = segmentDistance.toFixed(1);
         }
 
         cpData[j] = {
           name: this.cpNos[j],
           odometer: this.cpOdos[j].toFixed(1) + ' km',
-          racetime: minsToStr2( this.expectTimes[j] ),
+          racetime: minsToHM( this.expectTimes[j] ),
           localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
           cutoff: this.cutOffStrs[j],
 
