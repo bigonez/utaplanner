@@ -32,7 +32,8 @@
         </div>
 
         <div v-if="estimated">
-          <p class="uptitle">Race Check Points</p>
+          <p class="uptitle">Race Schedule</p>
+
           <el-table :data="cpData" stripe table-layout="auto">
             <el-table-column type="expand">
               <template #default="props">
@@ -67,9 +68,10 @@
             <el-table-column prop="odometer" label="Odometer" align="center" />
             <el-table-column prop="racetime" label="Race Time" align="center" />
           </el-table>
-          <sub>
-            * the generated schedule is based on the<br> 2021 UTA100's result.
-          </sub>
+
+          <p class="upcomments">
+            * the generated schedule is based on the 2021 UTA100's result.
+          </p>
         </div>
 
       </el-main>
@@ -259,9 +261,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-p {
-  margin-bottom: 5px;
-}
 .el-icon {
   margin-right: 15px;
 }
@@ -269,6 +268,7 @@ p {
   margin: 1em auto;
 }
 .uptitle {
+  text-align: left;
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -282,9 +282,19 @@ p {
 .el-main {
   padding: 20px 3px;
 }
+.el-main p {
+  margin-bottom: 0px;
+}
 div.cpinfo div, div.cp2next div {
   margin-top: 6px;
   margin-bottom: 6px;
+}
+.upcomments {
+  text-align: left;
+  font-size: 0.75em;
+  margin: 10px 15px;
+  padding-left: 0.65em;
+  text-indent: -0.65em;
 }
 span.cutoff {
   color: #dc143c;
