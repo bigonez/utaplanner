@@ -279,6 +279,9 @@ p {
   color: #483d8b;
   text-shadow: 2px 2px 5px grey;
 }
+.el-footer {
+  margin-top: 15px;
+}
 div.cpinfo div, div.cp2next div {
   margin-top: 6px;
   margin-bottom: 6px;
