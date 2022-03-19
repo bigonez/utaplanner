@@ -36,32 +36,39 @@
           <el-table :data="cpData" stripe table-layout="auto">
             <el-table-column type="expand">
               <template #default="props">
-                <p>Odometer: {{ props.row.odometer }} km</p>
-                <p>Local Time: {{ props.row.localtime }}</p>
-                <p>Cutoff Time: {{ props.row.cutoff }}</p>
+                <el-row>
+                  <el-col :span="1"><div class="grid-content" /></el-col>
+
+                  <el-col :span="11">
+                    <div class="grid-content bg-purple-light cpinfo">
+                      <div><strong>Details</strong></div>
+                      <div>Odometer: {{ props.row.odometer }} km</div>
+                      <div>Race Time: {{ props.row.racetime }}</div>
+                      <div>Local Time: {{ props.row.localtime }}</div>
+                      <div v-if="props.row.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cutoff }}</span></div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="11">
+                    <div class="grid-content bg-purple-light cp2next" v-if="props.row.pace">
+                      <div><strong>To Next</strong></div>
+                      <div>Distance: {{ props.row.distance }} km</div>
+                      <div>Elapsed Time: {{ props.row.elapse }}</div>
+                      <div>Pace: {{ props.row.pace }}</div>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="1"><div class="grid-content" /></el-col>
+                </el-row>
               </template>
             </el-table-column>
+
             <el-table-column prop="name" label="Check Point" align="center" />
             <el-table-column prop="racetime" label="Race Time" align="center" />
           </el-table>
-
-          <p class="uptitle">Race Segments</p>
-          <el-table :data="segmentData" stripe table-layout="auto">
-            <el-table-column type="expand">
-              <template #default="props">
-                <p>Time: {{ props.row.time }}</p>
-                <p>Distance: {{ props.row.distance }} km</p>
-                <p>Pace: {{ props.row.pace }}</p>
-              </template>
-            </el-table-column>
-
-            <el-table-column prop="from" label="From" align="center" />
-            <el-table-column prop="to" label="To" align="center" />
-          </el-table>
-
-          <p>
+          <sub>
             * the generated schedule is based on the 2021 UTA100's result.
-          </p>  
+          </sub>
         </div>
 
       </el-main>
@@ -103,6 +110,17 @@ var minsToStr = function (mins) {
   }
   return hr + ':' + min;
 };
+var minsToStr2 = function (mins) {
+  var hr = ~~( mins / 60);
+  if (hr < 10) {
+    hr = '' + hr;
+  }
+  var min = mins % 60;
+  if (min < 10) {
+    min = '0' + min;
+  }
+  return hr + 'h ' + min + 'm';
+};
 var formPace = function (km, mins) {
   var pace = mins / km;
   var m = ~~(pace);
@@ -110,7 +128,7 @@ var formPace = function (km, mins) {
   if (s < 10) {
     s = '0' + s;
   }
-  return m + '\'' + s + '"';
+  return m + '\' ' + s + '"';
 }
 
 export default {
@@ -131,7 +149,7 @@ export default {
                  "Ironpot Ridge Turnaround", "Six Foot Track", "Katoomba Aquatic Centre", "Fairmont Resort Water Point",
                  "Queen Victoria Hospital", "Sewage Treatment Works", "Base of Furber Steps", "Scenic World"],
       cpOdos: [0.0, 1.0, 3.0, 11.4, 21.8, 32.1, 34.7, 45.7, 57.0, 69.2, 78.4, 94.3, 99.0, 100.0],
-      cutOffStrs: ["---", "---", "---", "10:34", "---", "14:56", "---", "19:09", "22:28", "02:25", "05:39", "---", "---", "11:54"],
+      cutOffStrs: ["", "", "", "10:34", "", "14:56", "", "19:09", "22:28", "02:25", "05:39", "", "", "11:54"],
       ReferTimeStrs: [
         ["0:00:00", "0:04:34", "0:12:14", "1:01:04", "1:46:44", "2:41:32", "3:01:04", "4:02:34", "5:13:08", "6:41:37", "7:29:58", "9:04:32", "9:36:57", "9:51:32"],
         ["0:00:00", "0:04:29", "0:12:14", "1:00:44", "1:45:12", "2:38:01", "2:55:39", "3:54:43", "5:04:23", "6:38:10", "7:39:50", "9:12:12", "9:50:57", "10:04:28"],
@@ -196,35 +214,39 @@ export default {
       var cpData = [];
       cpData.length = this.totalCP;
       var startTime = this.startGroup;
+
+      var segmentDistance, segmentTime, segmentPace, distance, elapse;
+
       for (var j = 0; j < this.totalCP; j++) {
+        if (j == this.totalCP-1) {
+          segmentDistance = null;
+          segmentTime = null;
+          segmentPace = null;
+          elapse = null;
+          distance = null;
+        }
+        else {
+          segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
+          segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
+          segmentPace = formPace( segmentDistance, segmentTime );
+          elapse = minsToStr2( segmentTime );
+          distance = segmentDistance.toFixed(1);
+        }
+
         cpData[j] = {
           name: this.cpNos[j],
           odometer: this.cpOdos[j].toFixed(1),
           racetime: minsToStr( this.expectTimes[j] ),
           localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
-          cutoff: this.cutOffStrs[j]
+          cutoff: this.cutOffStrs[j],
+
+          elapse: elapse,
+          distance: distance,
+          pace: segmentPace
         };
       }
 
       return cpData;
-    },
-    segmentData() {
-      var segmentData = [];
-      segmentData.length = this.totalCP;
-      for (var j = 0; j < this.totalCP - 1; j++) {
-        var segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
-        var segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
-
-        segmentData[j] = {
-          from: this.cpNos[j],
-          to: this.cpNos[j+1],
-          time: minsToStr( segmentTime ),
-          distance: segmentDistance.toFixed(1),
-          pace: formPace( segmentDistance, segmentTime )
-        };
-      }
-
-      return segmentData;
     },
 
     estimated() {
@@ -256,7 +278,12 @@ p {
   color: #483d8b;
   text-shadow: 2px 2px 5px grey;
 }
-table p {
-  padding-left: 50px;
+div.cpinfo div, div.cp2next div {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+span.cutoff {
+  color: #dc143c;
+  font-weight: bold;
 }
 </style>
