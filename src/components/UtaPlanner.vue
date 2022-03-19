@@ -34,7 +34,7 @@
         <div v-if="estimated">
           <p class="uptitle">Race Schedule</p>
 
-          <el-table :data="cpData" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails">
+          <el-table :data="cpData" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails" @expand-change="oneExpanded">
             <el-table-column type="expand">
               <template #default="props">
                 <el-row>
@@ -259,6 +259,15 @@ export default {
   methods: {
     toggleDetails(row) {
       this.$refs.uptable.toggleRowExpansion(row);
+    },
+    oneExpanded(row, expanded) {
+      if (expanded.length > 1) {
+        for (var i = 0; i < expanded.length; i++) {
+          if (expanded[i] != row) {
+            this.$refs.uptable.toggleRowExpansion(expanded[i], false);
+          }
+        }
+      }
     }
   }
 }
