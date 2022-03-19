@@ -268,7 +268,6 @@ export default {
   margin: 1em auto;
 }
 .uptitle {
-  text-align: left;
   font-size: 1.2em;
   font-weight: bold;
 }
