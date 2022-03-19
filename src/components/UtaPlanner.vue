@@ -292,6 +292,8 @@ export default {
 }
 .el-main {
   padding: 20px 3px;
+  max-width: 1200px;
+  margin: 0px auto;
 }
 .el-main p {
   margin-bottom: 0px;
