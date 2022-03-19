@@ -3,7 +3,7 @@
     <el-container>
       <el-header>{{ msg }}</el-header>
 
-      <el-main style="padding:3px;">
+      <el-main>
 
         <p>
           Please choose the expected finish time and the start group to generate the race schedule.
@@ -279,8 +279,8 @@ p {
   color: #483d8b;
   text-shadow: 2px 2px 5px grey;
 }
-.el-footer {
-  margin-top: 15px;
+.el-main {
+  padding: 20px 3px;
 }
 div.cpinfo div, div.cp2next div {
   margin-top: 6px;
