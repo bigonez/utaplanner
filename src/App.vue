@@ -18,8 +18,10 @@ export default {
 </script>
 
 <style>
-#app {
+body {
   font-family: Calibri, Arial, Helvetica, sans-serif;
+}
+#app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
