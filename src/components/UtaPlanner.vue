@@ -14,8 +14,8 @@
             <flag />
           </el-icon>
           <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time">
-            <el-option v-for="hrs in finishHrs" :value="hrs" :label="hrs + ' hours'" :key="hrs.id">
-              {{ hrs }} hours
+            <el-option v-for="hrs in finishHrs" :value="hrs.v" :label="hrs.l" :key="hrs.id">
+              {{ hrs.l }}
             </el-option>
           </el-select>
         </div>
@@ -25,8 +25,8 @@
             <clock />
           </el-icon>
           <el-select v-model="startGroup" class="m-2" placeholder="Start Group">
-            <el-option v-for="sItem in startGrps" :value="sItem.sTime" :label="sItem.sLabel" :key="sItem.id">
-              {{ sItem.sLabel }}
+            <el-option v-for="sItem in startGrps" :value="sItem.t" :label="sItem.l" :key="sItem.id">
+              {{ sItem.l }}
             </el-option>
           </el-select>
         </div>
@@ -159,21 +159,29 @@ export default {
         ["0:00:00", "0:04:29", "0:12:17", "1:00:55", "1:46:26", "2:38:57", "2:56:37", "3:55:30", "5:05:22", "6:36:26", "7:37:34", "9:17:59", "9:56:58", "10:09:37"]
       ],
 
-      finishHrs: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
       startGrps: [
-        {sTime:380, sLabel:'Group 1, 6:20am'},
-        {sTime:387, sLabel:'Group 2, 6:27am'},
-        {sTime:416, sLabel:'Group 3, 6:56am'},
-        {sTime:426, sLabel:'Group 4, 7:06am'},
-        {sTime:441, sLabel:'Group 5, 7:21am'},
-        {sTime:457, sLabel:'Group 6, 7:37am'},
-        {sTime:474, sLabel:'Group 7, 7:54am'}
+        {t:380, l:'Group 1, 6:20am'},
+        {t:387, l:'Group 2, 6:27am'},
+        {t:416, l:'Group 3, 6:56am'},
+        {t:426, l:'Group 4, 7:06am'},
+        {t:441, l:'Group 5, 7:21am'},
+        {t:457, l:'Group 6, 7:37am'},
+        {t:474, l:'Group 7, 7:54am'}
       ],
       startGroup:  '',
       expectHours: ''
     }
   },
   computed: {
+    finishHrs() {
+      var finishHrs = [];
+      for (var i = 13; i < 28; i++) {
+        finishHrs.push( { v: i, l: i + 'h 00m' } );
+        finishHrs.push( { v: i+0.5, l: i + 'h 30m' } );
+      }
+      finishHrs.push( { v: 28, l: 28 + 'h 00m' } );
+      return finishHrs;
+    },
     totalCP() {
       return this.cpNos.length;
     },
