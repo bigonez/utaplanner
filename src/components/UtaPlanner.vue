@@ -14,9 +14,7 @@
             <flag />
           </el-icon>
           <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time">
-            <el-option v-for="hrs in finishHrs" :value="hrs.v" :label="hrs.l" :key="hrs.id">
-              {{ hrs.l }}
-            </el-option>
+            <el-option v-for="hrs in finishHrs" :value="hrs.v" :label="hrs.l" :key="hrs.id" />
           </el-select>
         </div>
 
@@ -25,9 +23,7 @@
             <clock />
           </el-icon>
           <el-select v-model="startGroup" class="m-2" placeholder="Start Group">
-            <el-option v-for="sItem in startGrps" :value="sItem.t" :label="sItem.l" :key="sItem.id">
-              {{ sItem.l }}
-            </el-option>
+            <el-option v-for="sg in startGrps" :value="sg.t" :label="sg.l" :key="sg.id" />
           </el-select>
         </div>
 
@@ -76,13 +72,20 @@
 
       </el-main>
 
-      <el-footer>&copy; Copyright 2022, bigonez</el-footer>
+      <el-footer>
+        &copy; Copyright 2022, bigonez
+        <a href="mailto:bigonez@gmail.com">
+          <el-icon :size="20" color="#2c3e50" style="vertical-align: bottom">
+            <message />
+          </el-icon>
+        </a>
+      </el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
-import { Clock, Flag } from '@element-plus/icons-vue'
+import { Clock, Flag, Message } from '@element-plus/icons-vue'
 
 var strToSeconds = function (timeStr) {
   var timeComponent = timeStr.split(':');
@@ -138,7 +141,8 @@ export default {
   name: 'UtaPlanner',
   components:{
     Clock,
-    Flag
+    Flag,
+    Message
   },
   props: {
     msg: String,
@@ -316,5 +320,9 @@ div.cpinfo div, div.cp2next div {
 span.cutoff {
   color: #dc143c;
   font-weight: bold;
+}
+.el-footer .el-icon:hover {
+  color: #409eff;
+  text-decoration: underline;
 }
 </style>
