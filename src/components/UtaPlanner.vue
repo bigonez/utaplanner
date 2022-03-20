@@ -34,7 +34,7 @@
             <el-table-column type="expand">
               <template #default="props">
                 <el-row>
-                  <el-col :span="1"><div class="grid-content" /></el-col>
+                  <el-col :span="2"><div class="grid-content" /></el-col>
 
                   <el-col :span="11">
                     <div class="grid-content bg-purple-light cpinfo">
@@ -55,7 +55,7 @@
                     </div>
                   </el-col>
 
-                  <el-col :span="1"><div class="grid-content" /></el-col>
+                  <el-col :span="0"><div class="grid-content" /></el-col>
                 </el-row>
               </template>
             </el-table-column>
