@@ -276,7 +276,9 @@ export default {
   font-size: 0.95em;
 }
 .el-footer {
-  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  height: 30px;
   font-size: 0.95em;
 }
 .el-footer .el-icon:hover {

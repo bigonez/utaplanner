@@ -70,6 +70,7 @@ export default {
 .uptitle {
   font-size: 1.2em;
   font-weight: bold;
+  margin: 20px auto 0px;
 }
 div.cpinfo div, div.cp2next div {
   margin-top: 6px;
