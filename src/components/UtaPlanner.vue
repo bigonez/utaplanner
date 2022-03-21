@@ -28,46 +28,7 @@
         </div>
 
         <div v-if="estimated">
-          <p class="uptitle">Race Schedule</p>
-
-          <el-table :data="cpData" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails" @expand-change="oneExpanded">
-            <el-table-column type="expand">
-              <template #default="props">
-                <el-row>
-                  <el-col :span="2"><div class="grid-content" /></el-col>
-
-                  <el-col :span="11">
-                    <div class="grid-content bg-purple-light cpinfo">
-                      <div><strong>Details</strong></div>
-                      <div>Odometer: {{ props.row.cpInfo.odometer }}</div>
-                      <div>Race Time: {{ props.row.cpInfo.racetime }}</div>
-                      <div>Local Time: {{ props.row.cpInfo.localtime }}</div>
-                      <div v-if="props.row.cpInfo.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
-                    </div>
-                  </el-col>
-
-                  <el-col :span="11">
-                    <div class="grid-content bg-purple-light cp2next" v-if="props.row.toNext">
-                      <div><strong>To Next</strong></div>
-                      <div>Distance: {{ props.row.toNext.distance }} km</div>
-                      <div>Elapsed Time: {{ props.row.toNext.elapse }}</div>
-                      <div>Pace: {{ props.row.toNext.pace }}</div>
-                    </div>
-                  </el-col>
-
-                  <el-col :span="0"><div class="grid-content" /></el-col>
-                </el-row>
-              </template>
-            </el-table-column>
-
-            <el-table-column prop="cpInfo.name" label="Check Point" align="center" />
-            <el-table-column prop="cpInfo.odometer" label="Odometer" align="center" />
-            <el-table-column prop="cpInfo.racetime" label="Race Time" align="center" />
-          </el-table>
-
-          <p class="upcomments">
-            * the generated schedule is based on the 2021 UTA100's result.
-          </p>
+          <ScheduleView :raceplan="cpData" />
         </div>
 
       </el-main>
@@ -86,6 +47,7 @@
 
 <script>
 import { Clock, Flag, Message } from '@element-plus/icons-vue'
+import ScheduleView from './ScheduleView.vue'
 
 var strToSeconds = function (timeStr) {
   var timeComponent = timeStr.split(':');
@@ -142,7 +104,9 @@ export default {
   components:{
     Clock,
     Flag,
-    Message
+    Message,
+
+    ScheduleView
   },
   props: {
     msg: String,
@@ -287,10 +251,6 @@ export default {
 .upform {
   margin: 1em auto;
 }
-.uptitle {
-  font-size: 1.2em;
-  font-weight: bold;
-}
 .el-header {
   --el-header-height: 25px;
   font-size: 2.24em;
@@ -305,21 +265,6 @@ export default {
 }
 .el-main p {
   margin-bottom: 0px;
-}
-div.cpinfo div, div.cp2next div {
-  margin-top: 6px;
-  margin-bottom: 6px;
-}
-.upcomments {
-  text-align: left;
-  font-size: 0.75em;
-  margin: 10px 15px;
-  padding-left: 0.65em;
-  text-indent: -0.65em;
-}
-span.cutoff {
-  color: #dc143c;
-  font-weight: bold;
 }
 .el-footer .el-icon:hover {
   color: #409eff;
