@@ -20,12 +20,12 @@ export default {
 <style>
 body {
   font-family: Calibri, Arial, Helvetica, sans-serif;
+  margin: 0px;
 }
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 25px;
 }
 </style>

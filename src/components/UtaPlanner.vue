@@ -34,7 +34,7 @@
       </el-main>
 
       <el-footer>
-        &copy; Copyright 2022, bigonez
+        &copy; Copyright {{ year }}, bigonez
         <a href="mailto:bigonez@gmail.com">
           <el-icon :size="20" color="#2c3e50" style="vertical-align: bottom">
             <message />
@@ -224,6 +224,10 @@ export default {
 
     estimated() {
       return !(this.startGroup == 0 || this.expectHours == 0);
+    },
+    year() {
+      const d = new Date();
+      return d.getFullYear();
     }
   },
   methods: {
@@ -253,18 +257,27 @@ export default {
 }
 .el-header {
   --el-header-height: 25px;
-  font-size: 2.24em;
+  font-size: 1.6em;
   font-weight: bold;
-  color: #191970;
-  text-shadow: 2px 2px 5px grey;
+  color: #fff;
+  background-color: #1976d2;
+  text-shadow: 2px 2px 5px navy;
+  height: 60px;
+  text-align: left;
+  padding-top: 15px;
 }
 .el-main {
-  padding: 20px 3px;
+  padding: 0px 10px;
   max-width: 1200px;
   margin: 0px auto;
 }
 .el-main p {
   margin-bottom: 0px;
+  font-size: 0.95em;
+}
+.el-footer {
+  height: 40px;
+  font-size: 0.95em;
 }
 .el-footer .el-icon:hover {
   color: #409eff;
