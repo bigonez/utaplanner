@@ -2,6 +2,10 @@
           <p class="uptitle">Race Schedule</p>
 
           <el-table :data="raceplan" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails" @expand-change="oneExpanded">
+            <el-table-column prop="cpInfo.name" label="Check Point" align="center" />
+            <el-table-column prop="cpInfo.odometer" label="Odometer" align="center" />
+            <el-table-column prop="cpInfo.racetime" label="Race Time" align="center" />
+
             <el-table-column type="expand">
               <template #default="props">
                 <el-row>
@@ -30,10 +34,6 @@
                 </el-row>
               </template>
             </el-table-column>
-
-            <el-table-column prop="cpInfo.name" label="Check Point" align="center" />
-            <el-table-column prop="cpInfo.odometer" label="Odometer" align="center" />
-            <el-table-column prop="cpInfo.racetime" label="Race Time" align="center" />
           </el-table>
 
           <p class="upcomments">
