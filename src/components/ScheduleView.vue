@@ -17,7 +17,7 @@
                       <div>Odometer: {{ props.row.cpInfo.odometer }}</div>
                       <div>Race Time: {{ props.row.cpInfo.racetime }}</div>
                       <div>Local Time: {{ props.row.cpInfo.localtime }}</div>
-                      <div v-if="props.row.cpInfo.cutoff!=''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
+                      <div v-if="props.row.cpInfo.cutoff != ''">Cutoff Time: <span class="cutoff">{{ props.row.cpInfo.cutoff }}</span></div>
                     </div>
                   </el-col>
 
@@ -35,7 +35,7 @@
           </el-table>
 
           <p class="upcomments">
-            * the generated schedule is based on the 2021 UTA100's result.
+            * the generated schedule is based on the 2021 UTA100's race result.
           </p>
 </template>
 

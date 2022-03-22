@@ -36,7 +36,7 @@
       <el-footer>
         &copy; Copyright {{ year }}, bigonez
         <a href="mailto:bigonez@gmail.com">
-          <el-icon :size="20" color="#2c3e50" style="vertical-align: bottom">
+          <el-icon :size="20" color="var(--el-text-color-primary)" style="vertical-align: bottom">
             <message />
           </el-icon>
         </a>
@@ -299,7 +299,7 @@ export default {
   font-size: var(--el-font-size-medium);
 }
 .el-footer .el-icon:hover {
-  color: #409eff;
+  color: var(--el-color-primary);
   text-decoration: underline;
 }
 </style>
