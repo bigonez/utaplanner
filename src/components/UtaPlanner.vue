@@ -288,14 +288,15 @@ export default {
   margin: 0px auto;
 }
 .el-main p {
+  text-align: left;
   margin-bottom: 0px;
-  font-size: 0.95em;
+  font-size: var(--el-font-size-medium);
 }
 .el-footer {
   margin-top: 10px;
   margin-bottom: 5px;
   height: 30px;
-  font-size: 0.95em;
+  font-size: var(--el-font-size-medium);
 }
 .el-footer .el-icon:hover {
   color: #409eff;

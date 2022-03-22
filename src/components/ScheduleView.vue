@@ -66,9 +66,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .uptitle {
-  font-size: 1.2em;
+  font-size: var(--el-font-size-large);
   font-weight: bold;
   margin: 20px auto 0px;
+  text-align: left;
 }
 div.cpinfo div, div.cp2next div {
   margin-top: 6px;
@@ -76,7 +77,7 @@ div.cpinfo div, div.cp2next div {
 }
 .upcomments {
   text-align: left;
-  font-size: 0.75em;
+  font-size: var(--el-font-size-small);
   margin: 10px 15px;
   padding-left: 0.65em;
   text-indent: -0.65em;
