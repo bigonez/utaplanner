@@ -29,8 +29,6 @@
                       <div>Pace: {{ props.row.toNext.pace }}</div>
                     </div>
                   </el-col>
-
-                  <el-col :span="0"><div class="grid-content" /></el-col>
                 </el-row>
               </template>
             </el-table-column>

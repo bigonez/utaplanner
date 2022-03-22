@@ -127,15 +127,7 @@ export default {
         ["0:00:00", "0:04:29", "0:12:17", "1:00:55", "1:46:26", "2:38:57", "2:56:37", "3:55:30", "5:05:22", "6:36:26", "7:37:34", "9:17:59", "9:56:58", "10:09:37"]
       ],
 
-      startGrps: [
-        {t:380, l:'Group 1, 6:20am'},
-        {t:387, l:'Group 2, 6:27am'},
-        {t:416, l:'Group 3, 6:56am'},
-        {t:426, l:'Group 4, 7:06am'},
-        {t:441, l:'Group 5, 7:21am'},
-        {t:457, l:'Group 6, 7:37am'},
-        {t:474, l:'Group 7, 7:54am'}
-      ],
+      startTimes: [380, 387, 416, 426, 441, 457, 474],
       startGroup:  '',
       expectHours: ''
     }
@@ -149,6 +141,30 @@ export default {
       }
       finishHrs.push( { v: 28, l: 28 + 'h 00m' } );
       return finishHrs;
+    },
+    startGrps() {
+      var startGrps = [];
+      for (var i = 0; i < this.startTimes.length; i++) {
+        var startTime = this.startTimes[i];
+
+        var startHr = ~~(startTime / 60) % 12;
+        if (startHr == 0) {
+          startHr = 12;
+        }
+
+        var startMin = startTime % 60;
+        if (startMin < 10) {
+          startMin = '0' + startMin;
+        }
+
+        var startAMPM = ' am';
+        if (startTime >= 12 * 60) {
+          startAMPM = ' pm';
+        }
+
+        startGrps.push( { t: startTime, l: 'Group ' + (i+1) + ', ' + startHr + ':' + startMin + startAMPM } );
+      }
+      return startGrps;
     },
     totalCP() {
       return this.cpNos.length;
