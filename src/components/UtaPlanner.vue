@@ -201,11 +201,6 @@ export default {
   max-width: 1200px;
   margin: 0px auto;
 }
-.el-main p {
-  text-align: left;
-  margin-bottom: 0px;
-  font-size: var(--el-font-size-medium);
-}
 .el-footer {
   margin-top: 10px;
   margin-bottom: 5px;

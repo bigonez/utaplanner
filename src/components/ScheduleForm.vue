@@ -89,6 +89,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+p {
+  text-align: left;
+  margin-bottom: 0px;
+  font-size: var(--el-font-size-medium);
+}
 .el-icon {
   margin-right: 15px;
 }
