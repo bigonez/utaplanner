@@ -1,7 +1,7 @@
 <template>
           <p class="uptitle">Race Schedule</p>
 
-          <el-table :data="schedule.raceplan" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails" @expand-change="oneExpanded">
+          <el-table :data="schedule.racePlan" stripe table-layout="auto" ref="uptable" @row-click="toggleDetails" @expand-change="oneExpanded">
             <el-table-column prop="cpInfo.name" label="Check Point" align="center" />
             <el-table-column prop="cpInfo.odometer" label="Odometer" align="center" />
             <el-table-column prop="cpInfo.racetime" label="Race Time" align="center" />
@@ -45,7 +45,6 @@ import { scheduleStore } from '../store/schedule.js'
 export default {
   name: 'ScheduleView',
   props: {
-//    raceplan: Object,
   },
   setup() {
     const schedule = scheduleStore()
