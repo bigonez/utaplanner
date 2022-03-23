@@ -5,30 +5,10 @@
 
       <el-main>
 
-        <p>
-          Please choose the expected finish time and the start group to generate the race schedule.
-        </p>
-
-        <div class="upform">
-          <el-icon :size="24" color="#dc143c" style="vertical-align: middle">
-            <flag />
-          </el-icon>
-          <el-select v-model="expectHours" class="m-2" placeholder="Expected Finish Time">
-            <el-option v-for="hrs in finishHrs" :value="hrs.v" :label="hrs.l" :key="hrs.id" />
-          </el-select>
-        </div>
-
-        <div class="upform">
-          <el-icon :size="24" color="#191970" style="vertical-align: middle">
-            <clock />
-          </el-icon>
-          <el-select v-model="startGroup" class="m-2" placeholder="Start Group">
-            <el-option v-for="sg in startGrps" :value="sg.t" :label="sg.l" :key="sg.id" />
-          </el-select>
-        </div>
+        <ScheduleForm />
 
         <div v-if="estimated">
-          <ScheduleView :raceplan="cpData" />
+          <ScheduleView />
         </div>
 
       </el-main>
@@ -46,70 +26,31 @@
 </template>
 
 <script>
-import { Clock, Flag, Message } from '@element-plus/icons-vue'
+import { Message } from '@element-plus/icons-vue'
+import ScheduleForm from './ScheduleForm.vue'
 import ScheduleView from './ScheduleView.vue'
 
-var strToSeconds = function (timeStr) {
-  var timeComponent = timeStr.split(':');
-  return timeComponent[0] * 3600 + timeComponent[1] * 60 + timeComponent[2] * 1;
-};
-var listToSeconds = function (timeStrs) {
-  var timeList = [];
-  for (var i = 0; i < timeStrs.length; i++) {
-    timeList.push( strToSeconds(timeStrs[i]) );
-  }
-  return timeList;
-};
-var groupToSeconds = function (timeGrpStrs) {
-  var timeGroup = [];
-  for (var i = 0; i < timeGrpStrs.length; i++) {
-    timeGroup.push( listToSeconds(timeGrpStrs[i]) );
-  }
-  return timeGroup;
-};
-var minsToStr = function (mins) {
-  var hr = ~~( mins / 60);
-  if (hr < 10) {
-    hr = '' + hr;
-  }
-  var min = mins % 60;
-  if (min < 10) {
-    min = '0' + min;
-  }
-  return hr + ':' + min;
-};
-var minsToHM = function (mins) {
-  var hr = ~~( mins / 60);
-  if (hr < 10) {
-    hr = '' + hr;
-  }
-  var min = mins % 60;
-  if (min < 10) {
-    min = '0' + min;
-  }
-  return hr + 'h ' + min + 'm';
-};
-var formPace = function (km, mins) {
-  var pace = mins / km;
-  var m = ~~(pace);
-  var s = Math.round(pace * 60 % 60);
-  if (s < 10) {
-    s = '0' + s;
-  }
-  return m + '\' ' + s + '"';
-}
+import { scheduleStore } from '../store/schedule.js'
+
+import * as utility from '../lib/Utilities'
 
 export default {
   name: 'UtaPlanner',
   components:{
-    Clock,
-    Flag,
     Message,
 
+    ScheduleForm,
     ScheduleView
   },
   props: {
     msg: String,
+  },
+  setup() {
+    const schedule = scheduleStore();
+
+    return {
+      schedule,
+    }
   },
   data() {
     return {
@@ -127,97 +68,95 @@ export default {
         ["0:00:00", "0:04:29", "0:12:17", "1:00:55", "1:46:26", "2:38:57", "2:56:37", "3:55:30", "5:05:22", "6:36:26", "7:37:34", "9:17:59", "9:56:58", "10:09:37"]
       ],
 
-      startTimes: [380, 387, 416, 426, 441, 457, 474],
-      startGroup:  '',
-      expectHours: ''
+      startTimes: [380, 387, 416, 426, 441, 457, 474]
     }
   },
   computed: {
-    finishHrs() {
-      var finishHrs = [];
-      for (var i = 13; i < 28; i++) {
-        finishHrs.push( { v: i, l: i + 'h 00m' } );
-        finishHrs.push( { v: i+0.5, l: i + 'h 30m' } );
-      }
-      finishHrs.push( { v: 28, l: 28 + 'h 00m' } );
-      return finishHrs;
-    },
-    startGrps() {
-      var startGrps = [];
-      for (var i = 0; i < this.startTimes.length; i++) {
-        var startTime = this.startTimes[i];
-
-        var startHr = ~~(startTime / 60) % 12;
-        if (startHr == 0) {
-          startHr = 12;
-        }
-
-        var startMin = startTime % 60;
-        if (startMin < 10) {
-          startMin = '0' + startMin;
-        }
-
-        var startAMPM = ' am';
-        if (startTime >= 12 * 60) {
-          startAMPM = ' pm';
-        }
-
-        startGrps.push( { t: startTime, l: 'Group ' + (i+1) + ', ' + startHr + ':' + startMin + startAMPM } );
-      }
-      return startGrps;
-    },
     totalCP() {
       return this.cpNos.length;
     },
-    totalRefer() {
-      return this.ReferTimeStrs.length;
+
+    startTime() {
+      return this.schedule.startGroup;
     },
 
-    referTimes() {
-      return groupToSeconds(this.ReferTimeStrs);
+    expectHours() {
+      return this.schedule.expectHours;
     },
 
-    expectTimes() {
-      if (this.expectHours == 0) {
-        return null;
+    estimated() {
+      return !(this.schedule.startGroup == 0 || this.schedule.expectHours == 0);
+    },
+
+    year() {
+      const d = new Date();
+      return d.getFullYear();
+    }
+  },
+  watch: {
+    expectHours: {
+      deep: true,
+      handler: function () {
+        this.calcExpectTimes();
+        this.calcRacePlan();
       }
+    },
+    startTime: {
+      deep: true,
+      handler: function () {
+        this.calcRacePlan();
+      }
+    },
+  },
+  methods: {
+    async calcExpectTimes() {
+      if (this.schedule.expectHours == 0) {
+        return;
+      }
+
+      var totalRefer = this.ReferTimeStrs.length;
+      var referTimes = utility.groupToSeconds(this.ReferTimeStrs);
 
       var expectTimes = [];
       expectTimes.length = this.totalCP;
       var refers = [];
-      refers.length = this.totalRefer;
+      refers.length = totalRefer;
 
       for (var k = 0; k < this.totalCP; k++) {
         expectTimes[k] = 0;
       }
-      for (var i = 0; i < this.totalRefer; i++) {
-        var referTime = this.referTimes[i][this.totalCP - 1];
-        var referFactor = this.expectHours * 3600 / referTime / this.totalRefer;
+      for (var i = 0; i < totalRefer; i++) {
+        var referTime = referTimes[i][this.totalCP - 1];
+        var referFactor = this.schedule.expectHours * 3600 / referTime / totalRefer;
         for (var j = 0; j < this.totalCP; j++) {
-          expectTimes[j] += this.referTimes[i][j] * referFactor;
+          expectTimes[j] += referTimes[i][j] * referFactor;
         }
       }
       for (k = 0; k < this.totalCP; k++) {
         expectTimes[k] = Math.round( expectTimes[k] / 60. );
       }
-      return expectTimes;
+
+      this.schedule.expecttimes = expectTimes;
     },
 
-    cpData() {
+    async calcRacePlan() {
+      if (! this.estimated) {
+        return;
+      }
+
       var cpData = [];
       cpData.length = this.totalCP;
-      var startTime = this.startGroup;
 
       for (var j = 0; j < this.totalCP; j++) {
         var toNext = null;
 
-        if (j < this.totalCP-1) {
+        if (j < this.totalCP - 1) {
           var segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
-          var segmentTime = this.expectTimes[j + 1] - this.expectTimes[j];
-          var segmentPace = formPace( segmentDistance, segmentTime );
+          var segmentTime = this.schedule.expecttimes[j + 1] - this.schedule.expecttimes[j];
+          var segmentPace = utility.formPace( segmentDistance, segmentTime );
 
           toNext = {
-            elapse: minsToHM( segmentTime ),
+            elapse: utility.minsToHM( segmentTime ),
             distance: segmentDistance.toFixed(1),
             pace: segmentPace
           }
@@ -227,37 +166,15 @@ export default {
           cpInfo: {
             name: this.cpNos[j],
             odometer: this.cpOdos[j].toFixed(1) + ' km',
-            racetime: minsToHM( this.expectTimes[j] ),
-            localtime: minsToStr( (startTime + this.expectTimes[j]) % 1440 ),
+            racetime: utility.minsToHM( this.schedule.expecttimes[j] ),
+            localtime: utility.minsToStr( (this.startTime + this.schedule.expecttimes[j]) % 1440 ),
             cutoff: this.cutOffStrs[j]
           },
           toNext: toNext
         };
       }
 
-      return cpData;
-    },
-
-    estimated() {
-      return !(this.startGroup == 0 || this.expectHours == 0);
-    },
-    year() {
-      const d = new Date();
-      return d.getFullYear();
-    }
-  },
-  methods: {
-    toggleDetails(row) {
-      this.$refs.uptable.toggleRowExpansion(row);
-    },
-    oneExpanded(row, expanded) {
-      if (expanded.length > 1) {
-        for (var i = 0; i < expanded.length; i++) {
-          if (expanded[i] != row) {
-            this.$refs.uptable.toggleRowExpansion(expanded[i], false);
-          }
-        }
-      }
+      this.schedule.raceplan = cpData;
     }
   }
 }
@@ -265,12 +182,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.el-icon {
-  margin-right: 15px;
-}
-.upform {
-  margin: 1em auto;
-}
 .el-header {
   --el-header-height: 25px;
   font-size: 1.6em;
