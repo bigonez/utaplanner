@@ -191,7 +191,7 @@ export default {
   font-weight: bold;
   color: #fff;
   background-color: #1976d2;
-  text-shadow: 2px 2px 5px navy;
+  text-shadow: 3px 3px 6px black;
   height: 60px;
   text-align: left;
   padding-top: 15px;
