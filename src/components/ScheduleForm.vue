@@ -16,7 +16,7 @@
           <el-icon :size="24" color="#191970" style="vertical-align: middle">
             <clock />
           </el-icon>
-          <el-select v-model="schedule.startGroup" class="m-2" placeholder="Start Group">
+          <el-select v-model="schedule.startTime" class="m-2" placeholder="Start Group">
             <el-option v-for="sg in startGrps" :value="sg.t" :label="sg.l" :key="sg.id" />
           </el-select>
         </div>

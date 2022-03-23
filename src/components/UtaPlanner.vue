@@ -74,8 +74,16 @@ export default {
       return this.cpNos.length;
     },
 
+    totalRefer() {
+      return this.ReferTimeStrs.length;
+    },
+
+    referTimes() {
+      return utility.groupToSeconds(this.ReferTimeStrs);
+    },
+
     startTime() {
-      return this.schedule.startGroup;
+      return this.schedule.startTime;
     },
 
     expectHours() {
@@ -83,7 +91,7 @@ export default {
     },
 
     estimated() {
-      return !(this.schedule.startGroup == 0 || this.schedule.expectHours == 0);
+      return !(this.startTime == '' || this.expectHours == '');
     },
 
     year() {
@@ -108,33 +116,30 @@ export default {
   },
   methods: {
     async calcExpectTimes() {
-      if (this.schedule.expectHours == 0) {
+      if (this.expectHours == '') {
         return;
       }
 
-      var totalRefer = this.ReferTimeStrs.length;
-      var referTimes = utility.groupToSeconds(this.ReferTimeStrs);
-
-      var expectTimes = [];
-      expectTimes.length = this.totalCP;
+      var raceTimes = [];
+      raceTimes.length = this.totalCP;
       var refers = [];
-      refers.length = totalRefer;
+      refers.length = this.totalRefer;
 
       for (var k = 0; k < this.totalCP; k++) {
-        expectTimes[k] = 0;
+        raceTimes[k] = 0;
       }
-      for (var i = 0; i < totalRefer; i++) {
-        var referTime = referTimes[i][this.totalCP - 1];
-        var referFactor = this.schedule.expectHours * 3600 / referTime / totalRefer;
+      for (var i = 0; i < this.totalRefer; i++) {
+        var referTime = this.referTimes[i][this.totalCP - 1];
+        var referFactor = this.expectHours * 3600 / referTime / this.totalRefer;
         for (var j = 0; j < this.totalCP; j++) {
-          expectTimes[j] += referTimes[i][j] * referFactor;
+          raceTimes[j] += this.referTimes[i][j] * referFactor;
         }
       }
       for (k = 0; k < this.totalCP; k++) {
-        expectTimes[k] = Math.round( expectTimes[k] / 60. );
+        raceTimes[k] = Math.round( raceTimes[k] / 60. );
       }
 
-      this.schedule.expecttimes = expectTimes;
+      this.schedule.raceTimes = raceTimes;
     },
 
     async calcRacePlan() {
@@ -150,7 +155,7 @@ export default {
 
         if (j < this.totalCP - 1) {
           var segmentDistance = Math.round((this.cpOdos[j + 1] - this.cpOdos[j]) * 10) / 10;
-          var segmentTime = this.schedule.expecttimes[j + 1] - this.schedule.expecttimes[j];
+          var segmentTime = this.schedule.raceTimes[j + 1] - this.schedule.raceTimes[j];
           var segmentPace = utility.formPace( segmentDistance, segmentTime );
 
           toNext = {
@@ -164,15 +169,15 @@ export default {
           cpInfo: {
             name: this.cpNos[j],
             odometer: this.cpOdos[j].toFixed(1) + ' km',
-            racetime: utility.minsToHM( this.schedule.expecttimes[j] ),
-            localtime: utility.minsToStr( (this.startTime + this.schedule.expecttimes[j]) % 1440 ),
+            racetime: utility.minsToHM( this.schedule.raceTimes[j] ),
+            localtime: utility.minsToStr( (this.startTime + this.schedule.raceTimes[j]) % 1440 ),
             cutoff: this.cutOffStrs[j]
           },
           toNext: toNext
         };
       }
 
-      this.schedule.raceplan = cpData;
+      this.schedule.racePlan = cpData;
     }
   }
 }

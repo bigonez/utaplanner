@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 
 export const scheduleStore = defineStore('schedule', {
   state: () => ({
-    startGroup: '',
+    startTime: '',
     expectHours: '',
 
-    expecttimes: null,
-    raceplan: null,
+    raceTimes: null,
+    racePlan: null,
   })
 
 })
