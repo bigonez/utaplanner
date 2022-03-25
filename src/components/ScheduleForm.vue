@@ -26,13 +26,14 @@
 import { Clock, Flag } from '@element-plus/icons-vue'
 import { scheduleStore } from '../store/schedule.js'
 
+import { startTimes, minHours, maxHours } from '../data/raceconfig'
+
+
 export default {
   name: 'ScheduleForm',
   components:{
     Clock,
     Flag
-  },
-  props: {
   },
   setup() {
     const schedule = scheduleStore()
@@ -41,25 +42,20 @@ export default {
       schedule,
     }
   },
-  data() {
-    return {
-      startTimes: [380, 387, 416, 426, 441, 457, 474]
-    }
-  },
   computed: {
     finishHrs() {
       var finishHrs = [];
-      for (var i = 13; i < 28; i++) {
+      for (var i = minHours; i < maxHours; i++) {
         finishHrs.push( { v: i, l: i + 'h 00m' } );
         finishHrs.push( { v: i+0.5, l: i + 'h 30m' } );
       }
-      finishHrs.push( { v: 28, l: 28 + 'h 00m' } );
+      finishHrs.push( { v: maxHours, l: maxHours + 'h 00m' } );
       return finishHrs;
     },
     startGrps() {
       var startGrps = [];
-      for (var i = 0; i < this.startTimes.length; i++) {
-        var startTime = this.startTimes[i];
+      for (var i = 0; i < startTimes.length; i++) {
+        var startTime = startTimes[i];
 
         var startHr = ~~(startTime / 60) % 12;
         if (startHr == 0) {

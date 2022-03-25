@@ -44,8 +44,6 @@ import { scheduleStore } from '../store/schedule.js'
 
 export default {
   name: 'ScheduleView',
-  props: {
-  },
   setup() {
     const schedule = scheduleStore()
 
