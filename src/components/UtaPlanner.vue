@@ -14,7 +14,7 @@
       </el-main>
 
       <el-footer>
-        &copy; Copyright {{ year }}, bigonez
+        &copy; Copyright {{ year }}, Jun Zhang
         <a href="mailto:bigonez@gmail.com">
           <el-icon :size="20" color="var(--el-text-color-primary)" style="vertical-align: bottom">
             <message />
