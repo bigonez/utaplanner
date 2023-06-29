@@ -35,7 +35,7 @@ import { scheduleStore } from '../store/schedule'
 import * as utility from '../lib/Utilities'
 
 import { cpNos, cpOdos, cutOffStrs } from '../data/cpinfo'
-import { ReferTimeStrs } from '../data/raceresult'
+import { PercentList } from '../data/racetimemodel'
 
 export default {
   name: 'UtaPlanner',
@@ -60,12 +60,8 @@ export default {
       return cpNos.length;
     },
 
-    totalRefer() {
-      return ReferTimeStrs.length;
-    },
-
-    referTimes() {
-      return utility.groupToSeconds(ReferTimeStrs);
+    PercentList() {
+      return PercentList;
     },
 
     startTime() {
@@ -108,21 +104,9 @@ export default {
 
       var raceTimes = [];
       raceTimes.length = this.totalCP;
-      var refers = [];
-      refers.length = this.totalRefer;
 
       for (var k = 0; k < this.totalCP; k++) {
-        raceTimes[k] = 0;
-      }
-      for (var i = 0; i < this.totalRefer; i++) {
-        var referTime = this.referTimes[i][this.totalCP - 1];
-        var referFactor = this.expectHours * 3600 / referTime / this.totalRefer;
-        for (var j = 0; j < this.totalCP; j++) {
-          raceTimes[j] += this.referTimes[i][j] * referFactor;
-        }
-      }
-      for (k = 0; k < this.totalCP; k++) {
-        raceTimes[k] = Math.round( raceTimes[k] / 60. );
+        raceTimes[k] = Math.round( this.expectHours * 3600 * PercentList[k] / 60. );
       }
 
       this.schedule.raceTimes = raceTimes;
