@@ -35,7 +35,8 @@ import { scheduleStore } from '../store/schedule'
 import * as utility from '../lib/Utilities'
 
 import { cpNos, cpOdos, cutOffStrs } from '../data/cpinfo'
-import { PercentList } from '../data/racetimemodel'
+
+import axios from 'axios'
 
 export default {
   name: 'UtaPlanner',
@@ -60,10 +61,6 @@ export default {
       return cpNos.length;
     },
 
-    PercentList() {
-      return PercentList;
-    },
-
     startTime() {
       return this.schedule.startTime;
     },
@@ -72,8 +69,16 @@ export default {
       return this.schedule.expectHours;
     },
 
+    racePercents() {
+      return this.schedule.racePercents;
+    },
+
+    referDataset() {
+      return this.schedule.referDataset;
+    },
+
     estimated() {
-      return !(this.startTime == '' || this.expectHours == '');
+      return !(this.startTime == '' || this.expectHours == '' || this.referDataset == '' || this.racePercents == null);
     },
 
     year() {
@@ -85,8 +90,7 @@ export default {
     expectHours: {
       deep: true,
       handler: function () {
-        this.calcExpectTimes();
-        this.calcRacePlan();
+        this.loadRacePercents();
       }
     },
     startTime: {
@@ -95,10 +99,68 @@ export default {
         this.calcRacePlan();
       }
     },
+    racePercents: {
+      deep: true,
+      handler: function () {
+        this.calcExpectTimes();
+        this.calcRacePlan();
+      }
+    },
+    referDataset: {
+      deep: true,
+      handler: function () {
+        this.loadRacePercents();
+      }
+    },
   },
   methods: {
+    async loadRacePercents() {
+      if (this.expectHours == '' || this.referDataset == '') {
+        return;
+      }
+
+      axios.get(process.env.VUE_APP_Optimizer + '/proportion/' + this.expectHours + ',' + this.referDataset)
+      .then(response => {
+        var eppData = response.data['epp']
+
+        var eppLen = eppData.length
+        var ArraiveIds = [6, 9, 11, 13, 15]
+
+        var TpPercents = {
+          1: 0.0,
+          2: 1.0
+        }
+
+        var Tp = 1.0
+        var Trace = Tp
+        for(var cp=0; cp < eppLen; cp++) {
+          var Pcp = Math.PI - Math.log(eppData[cp])
+
+          Tp *= (1 - Pcp) / Pcp
+          Trace += Tp
+
+          TpPercents[cp+3] = Trace
+        }
+        var PercentLen = Object.keys(TpPercents).length
+
+        var CpPercents = []
+        for(cp=0; cp < PercentLen; cp++) {
+          if( ArraiveIds.indexOf(cp+1) < 0 ) {
+            CpPercents.push( TpPercents[cp+1] / Trace )
+          }
+        }
+
+        this.schedule.racePercents = CpPercents;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      this.schedule.racePercents = null;
+    },
+
     async calcExpectTimes() {
-      if (this.expectHours == '') {
+      if (this.expectHours == '' || this.racePercents == null) {
         return;
       }
 
@@ -106,7 +168,7 @@ export default {
       raceTimes.length = this.totalCP;
 
       for (var k = 0; k < this.totalCP; k++) {
-        raceTimes[k] = Math.round( this.expectHours * 3600 * PercentList[k] / 60. );
+        raceTimes[k] = Math.round( this.expectHours * 60. * this.racePercents[k] );
       }
 
       this.schedule.raceTimes = raceTimes;
