@@ -1,6 +1,6 @@
 <template>
         <p>
-          Please choose the expected finish time and the start group to generate the race schedule.
+          Please choose the expected finish time, the start group and the reference dataset to generate the race schedule.
         </p>
 
         <div class="upform">
@@ -93,11 +93,11 @@ export default {
     referDSet() {
       var referDSet = []
 
-      referDSet.push( { v: -1,  l: 'Full Dataset' } )
       referDSet.push( { v: 50,  l: 'Closest 50'   } )
       referDSet.push( { v: 100, l: 'Closest 100'  } )
       referDSet.push( { v: 150, l: 'Closest 150'  } )
       referDSet.push( { v: 200, l: 'Closest 200'  } )
+      referDSet.push( { v: -1,  l: 'Full Dataset' } )
 
       return referDSet
     }
@@ -111,8 +111,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 p {
-  text-align: left;
-  margin-bottom: 0px;
+  text-align: justify;
+  margin: 1em 0.5em;
   font-size: var(--el-font-size-medium);
 }
 .el-icon {

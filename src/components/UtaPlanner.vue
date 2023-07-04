@@ -78,7 +78,7 @@ export default {
     },
 
     estimated() {
-      return !(this.startTime == '' || this.expectHours == '' || this.referDataset == '' || this.racePercents == null);
+      return !(this.startTime == null || this.expectHours == null || this.referDataset == null || this.racePercents == null);
     },
 
     year() {
@@ -115,7 +115,7 @@ export default {
   },
   methods: {
     async loadRacePercents() {
-      if (this.expectHours == '' || this.referDataset == '') {
+      if (this.expectHours == null || this.referDataset == null) {
         return;
       }
 
@@ -160,7 +160,7 @@ export default {
     },
 
     async calcExpectTimes() {
-      if (this.expectHours == '' || this.racePercents == null) {
+      if (this.expectHours == null || this.racePercents == null) {
         return;
       }
 
