@@ -55,11 +55,43 @@ const formPace = function (km, mins) {
   return m + '\' ' + s + '"';
 };
 
+const eppToPercents = function (eppData) {
+  var eppLen = eppData.length
+
+  var TpPercents = {
+    1: 0.0,
+    2: 1.0
+  }
+
+  var Tp = 1.0
+  var Trace = Tp
+  for(var cp=0; cp < eppLen; cp++) {
+    var Pcp = Math.PI - Math.log(eppData[cp])
+
+    Tp *= (1 - Pcp) / Pcp
+    Trace += Tp
+
+    TpPercents[cp+3] = Trace
+  }
+  var PercentLen = Object.keys(TpPercents).length
+
+  var ArraiveIds = [6, 9, 11, 13, 15]
+  var CpPercents = []
+  for(cp=0; cp < PercentLen; cp++) {
+    if( ArraiveIds.indexOf(cp+1) < 0 ) {
+      CpPercents.push( TpPercents[cp+1] / Trace )
+    }
+  }
+
+  return CpPercents;
+};
+
 export {
   strToSeconds,
   listToSeconds,
   groupToSeconds,
   minsToStr,
   minsToHM,
-  formPace
+  formPace,
+  eppToPercents,
 }
