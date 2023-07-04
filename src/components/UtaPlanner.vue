@@ -123,34 +123,7 @@ export default {
       .then(response => {
         var eppData = response.data['epp']
 
-        var eppLen = eppData.length
-        var ArraiveIds = [6, 9, 11, 13, 15]
-
-        var TpPercents = {
-          1: 0.0,
-          2: 1.0
-        }
-
-        var Tp = 1.0
-        var Trace = Tp
-        for(var cp=0; cp < eppLen; cp++) {
-          var Pcp = Math.PI - Math.log(eppData[cp])
-
-          Tp *= (1 - Pcp) / Pcp
-          Trace += Tp
-
-          TpPercents[cp+3] = Trace
-        }
-        var PercentLen = Object.keys(TpPercents).length
-
-        var CpPercents = []
-        for(cp=0; cp < PercentLen; cp++) {
-          if( ArraiveIds.indexOf(cp+1) < 0 ) {
-            CpPercents.push( TpPercents[cp+1] / Trace )
-          }
-        }
-
-        this.schedule.racePercents = CpPercents;
+        this.schedule.racePercents = utility.eppToPercents(eppData);
       })
       .catch(error => {
         console.log(error)
