@@ -97,7 +97,7 @@ export default {
       referDSet.push( { v: 100, l: 'Closest 100'  } )
       referDSet.push( { v: 150, l: 'Closest 150'  } )
       referDSet.push( { v: 200, l: 'Closest 200'  } )
-      referDSet.push( { v: -1,  l: 'Full Dataset' } )
+      referDSet.push( { v: 0,  l: 'Full Dataset' } )
 
       return referDSet
     }
