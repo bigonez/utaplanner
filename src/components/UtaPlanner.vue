@@ -119,7 +119,12 @@ export default {
         return;
       }
 
-      axios.get(process.env.VUE_APP_Optimizer + '/proportion/' + this.expectHours + ',' + this.referDataset)
+      axios.get(process.env.VUE_APP_Optimizer + '/proportion', {
+        params: {
+          finishtime: this.expectHours,
+          reference: this.referDataset
+        }
+      })
       .then(response => {
         var eppData = response.data['epp']
 
