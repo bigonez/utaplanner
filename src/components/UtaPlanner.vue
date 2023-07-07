@@ -119,7 +119,7 @@ export default {
         return;
       }
 
-      axios.get(process.env.VUE_APP_Regressor + '/proportion', {
+      axios.get(process.env.VUE_APP_Nodes, {
         params: {
           finishtime: this.expectHours,
           reference: this.referDataset
