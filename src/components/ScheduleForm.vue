@@ -8,7 +8,7 @@
             <coin />
           </el-icon>
           <el-select v-model="schedule.referDataset" class="m-2" placeholder="Reference Athletes">
-            <el-option v-for="rd in referDSet" :value="rd.v" :label="rd.l" :key="rd.id" />
+            <el-option v-for="rs in referSet" :value="rs.v" :label="rs.l" :key="rs.id" />
           </el-select>
         </div>
 
@@ -90,16 +90,16 @@ export default {
 
       return startGrps
     },
-    referDSet() {
-      var referDSet = []
+    referSet() {
+      var referSet = []
 
-      referDSet.push( { v: 50,  l: 'Closest 50'   } )
-      referDSet.push( { v: 100, l: 'Closest 100'  } )
-      referDSet.push( { v: 150, l: 'Closest 150'  } )
-      referDSet.push( { v: 200, l: 'Closest 200'  } )
-      referDSet.push( { v: 0,  l: 'All Athletes' } )
+      referSet.push( { v: 50,  l: 'Closest 50'   } )
+      referSet.push( { v: 100, l: 'Closest 100'  } )
+      referSet.push( { v: 150, l: 'Closest 150'  } )
+      referSet.push( { v: 200, l: 'Closest 200'  } )
+      referSet.push( { v: 0,  l: 'All Finishers' } )
 
-      return referDSet
+      return referSet
     }
   },
   methods: {
