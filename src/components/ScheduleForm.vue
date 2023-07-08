@@ -1,7 +1,16 @@
 <template>
         <p>
-          Please choose the expected finish time, the start group and the reference dataset to generate the race schedule.
+          Please choose the reference athletes, the expected finish time and the start group the to generate the race schedule.
         </p>
+
+        <div class="upform">
+          <el-icon :size="24" color="#4b0082" style="vertical-align: middle">
+            <coin />
+          </el-icon>
+          <el-select v-model="schedule.referDataset" class="m-2" placeholder="Reference Athletes">
+            <el-option v-for="rd in referDSet" :value="rd.v" :label="rd.l" :key="rd.id" />
+          </el-select>
+        </div>
 
         <div class="upform">
           <el-icon :size="24" color="#dc143c" style="vertical-align: middle">
@@ -18,15 +27,6 @@
           </el-icon>
           <el-select v-model="schedule.startTime" class="m-2" placeholder="Start Group">
             <el-option v-for="sg in startGrps" :value="sg.t" :label="sg.l" :key="sg.id" />
-          </el-select>
-        </div>
-
-        <div class="upform">
-          <el-icon :size="24" color="#4b0082" style="vertical-align: middle">
-            <coin />
-          </el-icon>
-          <el-select v-model="schedule.referDataset" class="m-2" placeholder="Reference Dataset">
-            <el-option v-for="rd in referDSet" :value="rd.v" :label="rd.l" :key="rd.id" />
           </el-select>
         </div>
 </template>
@@ -97,7 +97,7 @@ export default {
       referDSet.push( { v: 100, l: 'Closest 100'  } )
       referDSet.push( { v: 150, l: 'Closest 150'  } )
       referDSet.push( { v: 200, l: 'Closest 200'  } )
-      referDSet.push( { v: 0,  l: 'Full Dataset' } )
+      referDSet.push( { v: 0,  l: 'All Athletes' } )
 
       return referDSet
     }
