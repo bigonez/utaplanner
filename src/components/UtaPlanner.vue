@@ -1,7 +1,12 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>{{ msg }}</el-header>
+      <el-header>
+        {{ msg }}
+        <el-icon v-if="isloading" class="is-loading" :size="20" color="navy" style="float: right">
+          <loading />
+        </el-icon>
+      </el-header>
 
       <el-main>
 
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import { Message } from '@element-plus/icons-vue'
+import { Message, Loading } from '@element-plus/icons-vue'
 import ScheduleForm from './ScheduleForm.vue'
 import ScheduleView from './ScheduleView.vue'
 
@@ -42,12 +47,18 @@ export default {
   name: 'UtaPlanner',
   components:{
     Message,
+    Loading,
 
     ScheduleForm,
     ScheduleView
   },
   props: {
     msg: String,
+  },
+  data: function () {
+    return {
+      isloading: false,
+    };
   },
   setup() {
     const schedule = scheduleStore();
@@ -129,12 +140,15 @@ export default {
         var eppData = response.data['epp']
 
         this.schedule.racePercents = utility.eppToPercents(eppData);
+        this.isloading = false;
       })
       .catch(error => {
+        this.isloading = false;
         console.log(error)
       })
 
       this.schedule.racePercents = null;
+      this.isloading = true;
     },
 
     async calcExpectTimes() {
