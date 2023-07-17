@@ -130,7 +130,7 @@ export default {
         return;
       }
 
-      axios.get(process.env.VUE_APP_Nodes, {
+      axios.get(import.meta.env.VITE_Nodes_API, {
         params: {
           finishtime: this.expectHours,
           reference: this.referDataset
