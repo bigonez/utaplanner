@@ -5,7 +5,7 @@ const minHours = 13;
 const maxHours = 28;
 
 export {
-	startTimes,
-	minHours,
-	maxHours
+    startTimes,
+    minHours,
+    maxHours
 }
