@@ -1,15 +1,15 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <UtaPlanner msg="UTA 100 Planner"/>
+  <RacePlanner msg="UTA 100 Planner"/>
 </template>
 
 <script>
-import UtaPlanner from './components/UtaPlanner.vue'
+import RacePlanner from './components/RacePlanner.vue'
 
 export default {
   name: 'App',
   components: {
-    UtaPlanner
+    RacePlanner
   },
   created () {
     document.title = 'UTA 100 Planner';
