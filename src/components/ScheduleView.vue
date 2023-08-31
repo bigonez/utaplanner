@@ -11,9 +11,9 @@
                 <el-row>
                   <el-col :span="2"><div class="grid-content" /></el-col>
 
-                  <el-col :span="11">
+                  <el-col :span="props.row.toNext ? 11 : 22">
                     <div class="grid-content bg-purple-light cpinfo">
-                      <div><strong>Details</strong></div>
+                      <div><strong>{{ props.row.cpInfo.fullname }}</strong></div>
                       <div>Odometer: {{ props.row.cpInfo.odometer }}</div>
                       <div>Race Time: {{ props.row.cpInfo.racetime }}</div>
                       <div>Local Time: {{ props.row.cpInfo.localtime }}</div>
@@ -21,8 +21,8 @@
                     </div>
                   </el-col>
 
-                  <el-col :span="11">
-                    <div class="grid-content bg-purple-light cp2next" v-if="props.row.toNext">
+                  <el-col :span="11" v-if="props.row.toNext">
+                    <div class="grid-content bg-purple-light cp2next">
                       <div><strong>To Next</strong></div>
                       <div>Distance: {{ props.row.toNext.distance }} km</div>
                       <div>Elapsed Time: {{ props.row.toNext.elapse }}</div>

@@ -93,11 +93,14 @@ export default {
     referSet() {
       var referSet = []
 
-      referSet.push( { v: 50,  l: 'Closest 50'   } )
-      referSet.push( { v: 100, l: 'Closest 100'  } )
-      referSet.push( { v: 150, l: 'Closest 150'  } )
-      referSet.push( { v: 200, l: 'Closest 200'  } )
-      referSet.push( { v: 0,  l: 'All Finishers' } )
+      referSet.push( { v: 50,   l: 'Closest 50'    } )
+      referSet.push( { v: 100,  l: 'Closest 100'   } )
+      referSet.push( { v: 150,  l: 'Closest 150'   } )
+      referSet.push( { v: 200,  l: 'Closest 200'   } )
+      referSet.push( { v: -25,  l: 'Top 25'        } )
+      referSet.push( { v: -50,  l: 'Top 50'        } )
+      referSet.push( { v: -100, l: 'Top 100'       } )
+      referSet.push( { v: 0,    l: 'All Finishers' } )
 
       return referSet
     }
