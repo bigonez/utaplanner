@@ -55,7 +55,7 @@ const formPace = function (km, mins) {
     return m + '\' ' + s + '"';
 };
 
-const eppToPercents = function (eppData) {
+const eppToPercents = function (eppData, arrivalIdxs) {
     var eppLen = eppData.length
 
     var TpPercents = {
@@ -75,10 +75,9 @@ const eppToPercents = function (eppData) {
     }
     var PercentLen = Object.keys(TpPercents).length
 
-    var ArrivalIds = [4, 6, 8, 11, 13]
     var CpPercents = []
     for(cp=0; cp < PercentLen; cp++) {
-        if( ArrivalIds.indexOf(cp+1) < 0 ) {
+        if( arrivalIdxs.indexOf(cp+1) < 0 ) {
             CpPercents.push( TpPercents[cp+1] / Trace )
         }
     }
