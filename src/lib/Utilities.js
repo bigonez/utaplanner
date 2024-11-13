@@ -75,7 +75,7 @@ const eppToPercents = function (eppData) {
     }
     var PercentLen = Object.keys(TpPercents).length
 
-    var ArrivalIds = [6, 9, 11, 13, 15]
+    var ArrivalIds = [4, 6, 8, 11, 13]
     var CpPercents = []
     for(cp=0; cp < PercentLen; cp++) {
         if( ArrivalIds.indexOf(cp+1) < 0 ) {

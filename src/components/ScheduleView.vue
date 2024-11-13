@@ -35,7 +35,7 @@
           </el-table>
 
           <p class="upcomments">
-            * the above schedule was generated based on the UTA100 2023's race result.
+            * the above schedule was generated based on the UTA100 2024's race result.
           </p>
 </template>
 
