@@ -1,7 +1,7 @@
 const cpNos = [
      "Start", "Narrow Neck", "CP1", "CP2",
      "CP3", "CP4", "Gordon Falls", "CP5",
-     "CP6", "Emergency Aid Station", "Echo Point", "BoardWalk", "Finish"
+     "CP6", "Emergency AS", "Echo Point", "BoardWalk", "Finish"
  ];
 
 const cpNames = [
