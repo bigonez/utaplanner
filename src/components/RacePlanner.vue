@@ -39,7 +39,7 @@ import { scheduleStore } from '../store/schedule'
 
 import * as utility from '../lib/Utilities'
 
-import { cpNos, cpNames, cpOdos, cutOffStrs } from '../data/cpinfo'
+import { cpNos, cpNames, cpOdos, cutOffStrs, arrivalIdxs } from '../data/cpinfo'
 
 import axios from 'axios'
 
@@ -139,7 +139,7 @@ export default {
       .then(response => {
         var eppData = response.data['epp']
 
-        this.schedule.racePercents = utility.eppToPercents(eppData);
+        this.schedule.racePercents = utility.eppToPercents(eppData, arrivalIdxs);
         this.isloading = false;
       })
       .catch(error => {

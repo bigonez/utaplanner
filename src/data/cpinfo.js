@@ -2,7 +2,7 @@ const cpNos = [
      "Start", "Narrow Neck", "CP1", "CP2",
      "CP3", "CP4", "Gordon Falls", "CP5",
      "CP6", "Emergency AS", "Echo Point", "BoardWalk", "Finish"
- ];
+];
 
 const cpNames = [
     "Start", "Narrow Neck", "Medow Gap", "Foggy Knob",
@@ -18,9 +18,14 @@ const cutOffStrs = [
     "07:25", "", "10:45", "12:20", "16:05", "21:00", "", "00:50", "04:55", "", "", "", "11:25"
 ];
 
+const arrivalIdxs = [
+    4, 6, 8, 11, 13
+];
+
 export {
     cpNos,
     cpNames,
     cpOdos,
-    cutOffStrs
+    cutOffStrs,
+    arrivalIdxs
 }
