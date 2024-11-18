@@ -4,8 +4,11 @@ const minHours = 13;
 
 const maxHours = 28;
 
+const raceYear = 2024;
+
 export {
     startTimes,
     minHours,
-    maxHours
+    maxHours,
+    raceYear
 }
