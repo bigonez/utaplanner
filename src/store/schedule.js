@@ -10,5 +10,7 @@ export const scheduleStore = defineStore('schedule', {
 
         racePercents: null,
         referDataset: null,
+
+        raceYear: null,
     })
 })

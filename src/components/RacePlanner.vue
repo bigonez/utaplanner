@@ -40,6 +40,7 @@ import { scheduleStore } from '../store/schedule'
 import * as utility from '../lib/Utilities'
 
 import { cpNos, cpNames, cpOdos, cutOffStrs, arrivalIdxs } from '../data/cpinfo'
+import { raceYear } from '../data/raceconfig'
 
 import axios from 'axios'
 
@@ -148,6 +149,7 @@ export default {
       })
 
       this.schedule.racePercents = null;
+      this.schedule.raceYear = raceYear;
       this.isloading = true;
     },
 
