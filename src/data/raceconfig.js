@@ -1,14 +1,20 @@
-const startTimes = [380, 385, 400, 410, 420, 445, 445];
+const eventsConfig = {
+    1: {  // UTA100
+        startTimes: [380, 385, 400, 410, 420, 445, 445],
+        minHours: 13,
+        maxHours: 28
+    },
+    5: {  // UTA Miler
+        startTimes: [300],
+        minHours: 24,
+        maxHours: 42
+    },
 
-const minHours = 13;
+}
 
-const maxHours = 28;
-
-const raceYear = 2024;
+const raceYear = 2025;
 
 export {
-    startTimes,
-    minHours,
-    maxHours,
+    eventsConfig,
     raceYear
 }
