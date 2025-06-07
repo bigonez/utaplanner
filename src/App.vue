@@ -1,6 +1,6 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-  <RacePlanner msg="UTA 100 Planner"/>
+  <RacePlanner msg="UTA Planner"/>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
     RacePlanner
   },
   created () {
-    document.title = 'UTA 100 Planner';
+    document.title = 'UTA Planner';
   }
 }
 </script>
