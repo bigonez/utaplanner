@@ -39,9 +39,6 @@ import { scheduleStore } from '../store/schedule'
 
 import * as utility from '../lib/Utilities'
 
-import { cpNos, cpNames, cpOdos, cutOffStrs, arrivalIdxs } from '../data/cpinfo'
-import { raceYear } from '../data/raceconfig'
-
 import axios from 'axios'
 
 export default {
@@ -69,8 +66,12 @@ export default {
     }
   },
   computed: {
+    raceEvent() {
+      return this.schedule.raceEvent;
+    },
+
     totalCP() {
-      return cpNos.length;
+      return this.schedule.courseConfig.cpNos.length;
     },
 
     startTime() {
@@ -99,6 +100,12 @@ export default {
     }
   },
   watch: {
+    raceEvent: {
+      deep: true,
+      handler: function () {
+        this.loadRaceConfig();
+      }
+    },
     expectHours: {
       deep: true,
       handler: function () {
@@ -126,13 +133,47 @@ export default {
     },
   },
   methods: {
+    async loadRaceConfig() {
+      if (this.raceEvent == null) {
+        return;
+      }
+
+      axios.get(import.meta.env.VITE_Nodes_API + 'event', {
+        params: {
+          event: this.raceEvent
+        }
+      })
+      .then(response => {
+        this.schedule.eventProfile = response.data.eventProfile;
+        this.schedule.eventConfig = response.data.eventConfig;
+        this.schedule.courseConfig = response.data.courseConfig;
+
+        this.isloading = false;
+      })
+      .catch(error => {
+        this.isloading = false;
+        console.log(error)
+      })
+
+      // Default to null
+      this.schedule.referDataset = null;
+      this.schedule.expectHours = null;
+      this.schedule.startTime = null;
+
+      this.schedule.eventConfig = null;
+      this.schedule.courseConfig = null;
+
+      this.isloading = true;
+    },
+
     async loadRacePercents() {
       if (this.expectHours == null || this.referDataset == null) {
         return;
       }
 
-      axios.get(import.meta.env.VITE_Nodes_API, {
+      axios.get(import.meta.env.VITE_Nodes_API + 'nodes', {
         params: {
+          event: this.schedule.raceEvent,
           finishtime: this.expectHours,
           reference: this.referDataset
         }
@@ -140,7 +181,7 @@ export default {
       .then(response => {
         var eppData = response.data['epp']
 
-        this.schedule.racePercents = utility.eppToPercents(eppData, arrivalIdxs);
+        this.schedule.racePercents = utility.eppToPercents(eppData, this.schedule.courseConfig.arrivalIdxs);
         this.isloading = false;
       })
       .catch(error => {
@@ -149,7 +190,7 @@ export default {
       })
 
       this.schedule.racePercents = null;
-      this.schedule.raceYear = raceYear;
+
       this.isloading = true;
     },
 
@@ -180,7 +221,7 @@ export default {
         var toNext = null;
 
         if (j < this.totalCP - 1) {
-          var segmentDistance = Math.round((cpOdos[j + 1] - cpOdos[j]) * 10) / 10;
+          var segmentDistance = Math.round((this.schedule.courseConfig.cpOdos[j + 1] - this.schedule.courseConfig.cpOdos[j]) * 10) / 10;
           var segmentTime = this.schedule.raceTimes[j + 1] - this.schedule.raceTimes[j];
           var segmentPace = utility.formPace( segmentDistance, segmentTime );
 
@@ -193,12 +234,12 @@ export default {
 
         cpData[j] = {
           cpInfo: {
-            name: cpNos[j],
-            fullname: cpNames[j],
-            odometer: cpOdos[j].toFixed(1) + ' km',
+            name: this.schedule.courseConfig.cpNos[j],
+            fullname: this.schedule.courseConfig.cpNames[j],
+            odometer: this.schedule.courseConfig.cpOdos[j].toFixed(1) + ' km',
             racetime: utility.minsToHM( this.schedule.raceTimes[j] ),
             localtime: utility.minsToStr( (this.startTime + this.schedule.raceTimes[j]) % 1440 ),
-            cutoff: cutOffStrs[j]
+            cutoff: this.schedule.courseConfig.cutOffStrs[j]
           },
           toNext: toNext
         };

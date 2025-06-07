@@ -7,7 +7,7 @@
           <el-icon :size="24" color="#daa520" style="vertical-align: middle">
             <gold-medal />
           </el-icon>
-          <el-radio-group v-model="schedule.raceEvent" size="large" class="m-2" @change="resetOptions">
+          <el-radio-group v-model="schedule.raceEvent" size="large" class="m-2">
             <el-radio-button label="UTA Miler" value="5" />
             <el-radio-button label="UTA100" value="1" />
           </el-radio-group>
@@ -45,9 +45,6 @@
 import { Clock, Flag, Coin, GoldMedal } from '@element-plus/icons-vue'
 import { scheduleStore } from '../store/schedule.js'
 
-//import { startTimes, minHours, maxHours, eventConfig } from '../data/raceconfig'
-import { eventsConfig } from '../data/raceconfig'
-
 export default {
   name: 'ScheduleForm',
   components:{
@@ -77,44 +74,48 @@ export default {
       referSet.push( { v: 0,    l: 'All Finishers' } )
 
       return referSet
+    },
+
+    eventProfile() {
+      return this.schedule.eventProfile;
     }
 
   },
   data() {
     return {
       finishHrs: [],
-      startGrps: [],
-      eventConfig: null
+      startGrps: []
+    }
+  },
+  watch: {
+    eventProfile: {
+      deep: true,
+      handler: function () {
+        this.resetOptions();
+      }
     }
   },
   methods: {
     resetOptions() {
-      //this.schedule.raceEvent = 1; // Default to UTA100
-      this.schedule.referDataset = null; // Default to null
-      this.schedule.expectHours = null; // Default to null
-      this.schedule.startTime = null; // Default to null
-
-      this.eventConfig = eventsConfig[this.schedule.raceEvent];
-
       this.finishHrs = this.getFinishHours();
       this.startGrps = this.getStartGroups();
     },
     getFinishHours() {
       var finishHrs = []
 
-      for (var i = this.eventConfig.minHours; i < this.eventConfig.maxHours; i++) {
+      for (var i = this.schedule.eventConfig.minHours; i < this.schedule.eventConfig.maxHours; i++) {
         finishHrs.push( { v: i, l: i + 'h 00m' } )
         finishHrs.push( { v: i+0.5, l: i + 'h 30m' } )
       }
-      finishHrs.push( { v: this.eventConfig.maxHours, l: this.eventConfig.maxHours + 'h 00m' } )
+      finishHrs.push( { v: this.schedule.eventConfig.maxHours, l: this.schedule.eventConfig.maxHours + 'h 00m' } )
 
       return finishHrs
     },
     getStartGroups() {
       var startGrps = []
 
-      for (var i = 0; i < this.eventConfig.startTimes.length; i++) {
-        var startTime = this.eventConfig.startTimes[i]
+      for (var i = 0; i < this.schedule.eventConfig.startTimes.length; i++) {
+        var startTime = this.schedule.eventConfig.startTimes[i]
 
         var startHr = ~~(startTime / 60) % 12
         if (startHr == 0) {

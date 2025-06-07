@@ -4,6 +4,10 @@ export const scheduleStore = defineStore('schedule', {
     state: () => ({
         raceEvent: null,
 
+        eventProfile: null,
+        eventConfig: null,
+        courseConfig: null,
+
         startTime: null,
         expectHours: null,
 
@@ -12,7 +16,5 @@ export const scheduleStore = defineStore('schedule', {
 
         racePercents: null,
         referDataset: null,
-
-        raceYear: null,
     })
 })

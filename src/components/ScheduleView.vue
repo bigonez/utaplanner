@@ -34,8 +34,11 @@
             </el-table-column>
           </el-table>
 
-          <p class="upcomments">
-            * the above schedule was generated based on the UTA{{ schedule.raceEvent == 1 ? '100' : ' Miler' }} {{ schedule.raceYear }}'s race result.
+          <p class="footnote1">
+            * the above schedule was generated based on the {{ schedule.eventProfile.name }} {{ schedule.eventProfile.year }}'s race result.<br />
+          </p>
+          <p class="footnote2">
+            ** all above race time is the departure time which include the rest time on site, except the finish.
           </p>
 </template>
 
@@ -80,12 +83,17 @@ div.cpinfo div, div.cp2next div {
   margin-top: 6px;
   margin-bottom: 6px;
 }
-.upcomments {
+.footnote1, .footnote2 {
   text-align: left;
   font-size: var(--el-font-size-small);
-  margin: 10px 15px;
+  margin: 10px 15px 0px;
   padding-left: 0.65em;
   text-indent: -0.65em;
+}
+.footnote2 {
+  margin: 0px 15px 10px;
+  padding-left: 0.75em;
+  text-indent: -1.25em;
 }
 span.cutoff {
   color: #dc143c;
