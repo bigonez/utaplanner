@@ -10,9 +10,6 @@ export default {
   name: 'App',
   components: {
     RacePlanner
-  },
-  created () {
-    document.title = 'UTA Planner';
   }
 }
 </script>
