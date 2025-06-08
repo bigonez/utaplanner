@@ -1,10 +1,10 @@
 <template>
         <p>
-          Please choose the reference athletes, the expected finish time and the start group the to generate the race schedule.
+          Please choose the race event, the reference athletes, the expected finish time and the start group the to generate the race schedule.
         </p>
 
         <div class="upform">
-          <el-icon :size="24" color="#daa520" style="vertical-align: middle">
+          <el-icon :size="24" color="#daa520">
             <gold-medal />
           </el-icon>
           <el-radio-group v-model="schedule.raceEvent" size="large" class="m-2">
@@ -14,7 +14,7 @@
         </div>
 
         <div class="upform">
-          <el-icon :size="24" color="#4b0082" style="vertical-align: middle">
+          <el-icon :size="24" color="#4b0082">
             <coin />
           </el-icon>
           <el-select v-model="schedule.referDataset" class="m-2" placeholder="Reference Athletes" :disabled="!schedule.raceEvent">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="upform">
-          <el-icon :size="24" color="#dc143c" style="vertical-align: middle">
+          <el-icon :size="24" color="#dc143c">
             <flag />
           </el-icon>
           <el-select v-model="schedule.expectHours" class="m-2" placeholder="Expected Finish Time" :disabled="!schedule.raceEvent">
@@ -32,7 +32,7 @@
         </div>
 
         <div class="upform">
-          <el-icon :size="24" color="#0066cc" style="vertical-align: middle">
+          <el-icon :size="24" color="#0066cc">
             <clock />
           </el-icon>
           <el-select v-model="schedule.startTime" class="m-2" placeholder="Start Group" :disabled="!schedule.raceEvent">
@@ -150,6 +150,7 @@ p {
 }
 .el-icon {
   margin-right: 15px;
+  vertical-align: middle;
 }
 .upform {
   margin: 1em auto;
